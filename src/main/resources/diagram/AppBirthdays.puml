@@ -1,0 +1,84 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+package "ui" {
+    package "swing" {
+
+    }
+}
+
+package "domain" {
+
+    package "impl-domain" {
+        class User1Service {
+
+        }
+
+        class User2Service {
+
+        }
+    }
+
+    package "interfaces-domain" {
+
+    }
+
+    package "models" {
+        UserFriendsData o-- FriendBirthdayDate
+        UserFriendsData o-- AboutFriend
+        UserFriendsData o-- User
+
+        class User {
+        -String firstName;
+        -String lastName;
+        -String email;
+        .. encrypted ..
+        -String password;
+        __
+        +User();
+        +String get();
+        +String set();
+        }
+
+        class UserFriendsData {
+        -FriendBirthdayDate friendBirthdayDate;
+        -AboutFriend aboutFriend;
+        -User user;
+        __
+        +UserFriendsData(FriendBirthdayDate friendBirthdayDate,
+        AboutFriend aboutFriend, User user);
+        }
+
+        class FriendBirthdayDate {
+        }
+
+        class AboutFriend {
+        }
+    }
+
+    note "=" as N2
+
+}
+
+package "dao" {
+
+    package "query" {
+
+    }
+
+    package "impl-dao" {
+
+    }
+
+    package "interfaces-dao" {
+
+    }
+
+    package "config" {
+
+    }
+
+}
+
+
+@enduml
