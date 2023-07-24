@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ua.birthdays.app.ui.swing.menuview.UserMainMenuView">
+  <grid id="27dc6" binding="panelUserMainMenu" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="566" height="400"/>
+    </constraints>
+    <properties>
+      <background color="-12434105"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <grid id="de218" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-12434105"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="6c656" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Lucida Handwriting" size="36" style="0"/>
+              <foreground color="-723724"/>
+              <text value="User Menu"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="18165" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="20" bottom="0" right="20"/>
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-12434105"/>
+        </properties>
+        <border type="line">
+          <color color="-14079703"/>
+        </border>
+        <children>
+          <component id="3eb59" class="javax.swing.JButton" binding="checkListBirthdaysButton" default-binding="true">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-16711930"/>
+              <font name="Montserrat Thin" size="18" style="0"/>
+              <text value="Check list Birthdays"/>
+            </properties>
+          </component>
+          <component id="1d9b9" class="javax.swing.JButton" binding="addNewFriendBirthdayButton">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-16711930"/>
+              <font name="Montserrat Thin" size="18" style="0"/>
+              <text value="Add new Friend's Birthday"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="93b21" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="20" bottom="0" right="20"/>
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-12434105"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="38eac" class="javax.swing.JButton" binding="exitAnAccountButton" default-binding="true">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-58368"/>
+              <font name="Montserrat Thin" size="18" style="0"/>
+              <text value="Exit an account"/>
+            </properties>
+          </component>
+          <hspacer id="a8bc6">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>
