@@ -10,18 +10,23 @@ import ua.birthdays.app.dao.query.QueryFriendBirthdayDate;
 import ua.birthdays.app.dao.query.QueryUserFriendsData;
 import ua.birthdays.app.dao.util.DBConnector;
 import ua.birthdays.app.dao.util.UtilDAO;
+import ua.birthdays.app.models.AboutFriend;
+import ua.birthdays.app.models.FriendBirthdayDate;
+import ua.birthdays.app.models.User;
 import ua.birthdays.app.models.UserFriendsData;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
     private final static Logger logger = LogManager.getLogger(UserFriendsDataDAOMySQLImpl.class.getName());
 
     @Override
-    public boolean createUserFriendsData(UserFriendsData userFriendsData) throws DAOException {
+    public boolean createUserFriendsData(UserFriendsData userFriendsData, long idAboutFriendRow, long idFriendBirthdayDateRow) throws DAOException {
         if (!UtilDAO.isTableExists(EnumDBNameTables.USER_FRIENDS_DATA_TABLE.getEnumDBEnvironment())) {
             try (Connection connection = DBConnector.getConnection();
                  PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.createTableUserFriendsData())
@@ -33,47 +38,24 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
             }
         }
 
-        if (!UtilDAO.isTableExists(EnumDBNameTables.ABOUT_FRIEND_TABLE.getEnumDBEnvironment())) {
-            try (Connection connection = DBConnector.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(QueryAboutFriend.createTableAboutFriend())
-            ) {
-                statement.executeUpdate();
-                logger.info("Create table \"about_friend\" was successful!");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (!UtilDAO.isTableExists(EnumDBNameTables.FRIEND_BIRTHDAY_DATE_TABLE.getEnumDBEnvironment())) {
-            try (Connection connection = DBConnector.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(QueryFriendBirthdayDate.createTableFriendBirthdayDate())
-            ) {
-                statement.executeUpdate();
-                logger.info("Create table \"friend_birthday_date\" was successful!");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        try(Connection connection = DBConnector.getConnection();
-            PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.createUserFriendsData())) {
-            statement.setInt(1, ReadIdMySQL.readIdAboutFriend(userFriendsData.getAboutFriend()));
-            statement.setInt(2, ReadIdMySQL.readIdFriendBirthdayDate(userFriendsData.getFriendBirthdayDate()));
-            statement.setInt(3,
+        try (Connection connection = DBConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.createUserFriendsData())) {
+            statement.setLong(1, idAboutFriendRow);
+            statement.setLong(2, idFriendBirthdayDateRow);
+            statement.setLong(3,
                     ReadIdMySQL.readIdUser(userFriendsData.getUser().getEmail(), userFriendsData.getUser().getPassword()));
             statement.executeUpdate();
-            logger.info("Create user was successful!");
-            statement.executeUpdate();
-        }catch (SQLException e){
-            logger.error("Cannot create user!", e);
-            throw new DAOException("Cannot create user!", e);
+            logger.info("Create createUserFriendsData was successful!");
+        } catch (SQLException e) {
+            logger.error("Cannot create createUserFriendsData!", e);
+            throw new DAOException("Cannot create createUserFriendsData!", e);
         }
         return true;
     }
 
     @Override
-    public UserFriendsData readUserFriendsData(int idUserFriendsData) throws DAOException {
-        UserFriendsData userFriendsData = null;
+    public List<UserFriendsData> readAllUserFriendsData(User user) throws DAOException {
+        List<UserFriendsData> userFriendsDataList = new ArrayList<>();
 
         if (!UtilDAO.isTableExists(EnumDBNameTables.USER_FRIENDS_DATA_TABLE.getEnumDBEnvironment())) {
             try (Connection connection = DBConnector.getConnection();
@@ -86,45 +68,31 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
             }
         }
 
-        if (!UtilDAO.isTableExists(EnumDBNameTables.ABOUT_FRIEND_TABLE.getEnumDBEnvironment())) {
-            try (Connection connection = DBConnector.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(QueryAboutFriend.createTableAboutFriend())
-            ) {
-                statement.executeUpdate();
-                logger.info("Create table \"about_friend\" was successful!");
-            } catch (SQLException e) {
-                e.printStackTrace();
+        try (Connection connection = DBConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.findUserFriendsDataByUserId())) {
+            statement.setInt(1, ReadIdMySQL.readIdUser(user.getEmail(), user.getPassword()));
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    userFriendsDataList.add(
+                            new UserFriendsData(
+                                    new FriendBirthdayDate(
+                                            resultSet.getDate("friend_date").toLocalDate(),
+                                            resultSet.getInt("reminded_friend_hour"),
+                                            resultSet.getInt("reminded_friend_minutes"),
+                                            resultSet.getInt("reminded_count_days_before_birthday")
+                                    ),
+                                    new AboutFriend(resultSet.getString("name_friend")),
+                                    user
+                            )
+                    );
+                }
+                logger.info("Read ALL User Friends Data was successful!");
             }
-        }
-
-        if (!UtilDAO.isTableExists(EnumDBNameTables.FRIEND_BIRTHDAY_DATE_TABLE.getEnumDBEnvironment())) {
-            try (Connection connection = DBConnector.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(QueryFriendBirthdayDate.createTableFriendBirthdayDate())
-            ) {
-                statement.executeUpdate();
-                logger.info("Create table \"friend_birthday_date\" was successful!");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        try(Connection connection = DBConnector.getConnection();
-            PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.createUserFriendsData())) {
-            statement.setInt(1, ReadIdMySQL.readIdAboutFriend(userFriendsData.getAboutFriend()));
-
-            statement.executeUpdate();
-            logger.info("Create user was successful!");
-            statement.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             logger.error("Cannot create user!", e);
             throw new DAOException("Cannot create user!", e);
         }
-        return userFriendsData;
-    }
-
-    @Override
-    public List<UserFriendsData> readAllUserFriendsData(int idUser) throws DAOException {
-        return null;
+        return userFriendsDataList;
     }
 
     @Override

@@ -18,6 +18,6 @@ public class QueryUser {
     }
 
     public static String findUserByEmailAndPassword() {
-        return "select * from users where email in (?) and password in (?);";
+        return "select * from users where email = (?) and password = (?);";
     }
 }
