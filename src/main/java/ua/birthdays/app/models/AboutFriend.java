@@ -10,4 +10,11 @@ public class AboutFriend {
     public String getNameFriend() {
         return nameFriend;
     }
+
+    @Override
+    public String toString() {
+        return "AboutFriend{" +
+                "nameFriend='" + nameFriend + '\'' +
+                '}';
+    }
 }

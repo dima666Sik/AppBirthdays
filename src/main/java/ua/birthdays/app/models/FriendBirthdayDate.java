@@ -1,49 +1,46 @@
 package ua.birthdays.app.models;
 
-import java.time.Month;
-import java.time.MonthDay;
-import java.time.Year;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class FriendBirthdayDate {
-    private final Month monthBirthdayDate;
-    private final MonthDay monthDayBirthdayDate;
-    private final Year yearBirthdayDate;
+    private final LocalDate friendDate;
 
-    private final Integer hour;
-    private final Integer minutes;
+    private final int remindedFriendHour;
+    private final int remindedFriendMinutes;
 
-    private final Integer remindedCountDaysBeforeBirthday;
+    private final int remindedCountDaysBeforeBirthday;
 
-    public FriendBirthdayDate(Month monthBirthdayDate, MonthDay monthDayBirthdayDate, Year yearBirthdayDate, Integer hour, Integer minutes, Integer remindedCountDaysBeforeBirthday) {
-        this.monthBirthdayDate = monthBirthdayDate;
-        this.monthDayBirthdayDate = monthDayBirthdayDate;
-        this.yearBirthdayDate = yearBirthdayDate;
-        this.hour = hour;
-        this.minutes = minutes;
+    public FriendBirthdayDate(LocalDate friendDate, int remindedFriendHour, int remindedFriendMinutes, int remindedCountDaysBeforeBirthday) {
+        this.friendDate = friendDate;
+        this.remindedFriendHour = remindedFriendHour;
+        this.remindedFriendMinutes = remindedFriendMinutes;
         this.remindedCountDaysBeforeBirthday = remindedCountDaysBeforeBirthday;
     }
 
-    public Month getMonthBirthdayDate() {
-        return monthBirthdayDate;
+    public LocalDate getFriendDate() {
+        return friendDate;
     }
 
-    public MonthDay getMonthDayBirthdayDate() {
-        return monthDayBirthdayDate;
+    public int getRemindedFriendHour() {
+        return remindedFriendHour;
     }
 
-    public Year getYearBirthdayDate() {
-        return yearBirthdayDate;
+    public int getRemindedFriendMinutes() {
+        return remindedFriendMinutes;
     }
 
-    public Integer getHour() {
-        return hour;
-    }
-
-    public Integer getMinutes() {
-        return minutes;
-    }
-
-    public Integer getRemindedCountDaysBeforeBirthday() {
+    public int getRemindedCountDaysBeforeBirthday() {
         return remindedCountDaysBeforeBirthday;
+    }
+
+    @Override
+    public String toString() {
+        return "FriendBirthdayDate{" +
+                "friendDate=" + friendDate +
+                ", remindedFriendHour=" + remindedFriendHour +
+                ", remindedFriendMinutes=" + remindedFriendMinutes +
+                ", remindedCountDaysBeforeBirthday=" + remindedCountDaysBeforeBirthday +
+                '}';
     }
 }

@@ -2,3 +2,4 @@
 src/main/resources/diagram
 src/main/java/ua/birthdays/app/dao/env/
 target/
+logger.log

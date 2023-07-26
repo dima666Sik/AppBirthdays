@@ -22,4 +22,13 @@ public class UserFriendsData {
     public User getUser() {
         return user;
     }
+
+    @Override
+    public String toString() {
+        return "UserFriendsData{" +
+                "friendBirthdayDate=" + friendBirthdayDate +
+                ", aboutFriend=" + aboutFriend +
+                ", user=" + user +
+                '}';
+    }
 }
