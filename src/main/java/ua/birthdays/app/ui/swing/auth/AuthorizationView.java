@@ -3,8 +3,8 @@ package ua.birthdays.app.ui.swing.auth;
 import ua.birthdays.app.domain.impl.AuthServiceImpl;
 import ua.birthdays.app.domain.interfaces.AuthService;
 import ua.birthdays.app.models.User;
+import ua.birthdays.app.ui.swing.features.ListUserFriendBirthdaysView;
 import ua.birthdays.app.ui.swing.menuview.HomeView;
-import ua.birthdays.app.ui.swing.menuview.UserMainMenuView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -73,7 +73,7 @@ public class AuthorizationView extends JDialog {
         }
 
         dispose();
-        new UserMainMenuView();
+        new ListUserFriendBirthdaysView(user);
     }
 
     private void clearFieldsForm() {
