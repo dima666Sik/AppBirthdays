@@ -11,5 +11,11 @@ public interface MainFeaturesService {
     boolean createUserFriendsData(UserFriendsData userFriendsData);
     boolean createFriendBirthdayDate(FriendBirthdayDate friendBirthdayDate);
     boolean createAboutFriend(AboutFriend aboutFriend);
-    List<UserFriendsData> readAllUserFriendsData(User user);
+    List<UserFriendsData> readAllUserFriendsDataDescendingByFriendBirthdayDate(User user);
+    List<UserFriendsData> readAllUserFriendsDataAscendingByFriendBirthdayDate(User user);
+    List<UserFriendsData> readAllUserFriendsDataDescendingByNameFriend(User user);
+    List<UserFriendsData> readAllUserFriendsDataAscendingByNameFriend(User user);
+    List<UserFriendsData> readAllUserFriendsDataByDefault(User user);
+    boolean updateUserFriendsData(UserFriendsData oldUserFriendsData, UserFriendsData newUserFriendsData);
+    boolean deleteUserFriendsData(User user, String nameFriend, String friendBirthdayDate);
 }

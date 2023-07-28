@@ -2,6 +2,7 @@ package ua.birthdays.app.dao.mysql.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.birthdays.app.dao.exceptions.DAOException;
 import ua.birthdays.app.dao.query.QueryAboutFriend;
 import ua.birthdays.app.dao.query.QueryFriendBirthdayDate;
 import ua.birthdays.app.dao.query.QueryUser;
@@ -11,16 +12,15 @@ import ua.birthdays.app.models.FriendBirthdayDate;
 import ua.birthdays.app.models.User;
 
 import java.io.FileReader;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.time.LocalDate;
 
 public class ReadIdMySQL {
 
     final static Logger logger = LogManager.getLogger(FileReader.class);
 
-    public static int readIdUser(String email, String password) {
-        int id = 0;
+    public static long readIdUser(String email, String password) {
+        long id = 0;
         try (Connection connection = DBConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(QueryUser.findUserByEmailAndPassword());
         ) {
@@ -39,5 +39,22 @@ public class ReadIdMySQL {
             logger.error(e);
         }
         return id;
+    }
+
+    public static long readIdFriendsDataRowByIdUserAndFriendNameAndDateFriendBirthday(long idUser, String friendsName, String dateFriendBirthday) throws DAOException {
+        long idFriendsData = 0;
+        try(Connection connection = DBConnector.getConnection();
+            PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.existsByUserIdAndFriendNameAndFriendDate())){
+            statement.setLong(1,idUser);
+            statement.setString(2,friendsName);
+            statement.setDate(3, Date.valueOf(dateFriendBirthday));
+            try (ResultSet resultSet = statement.executeQuery()){
+                if (resultSet.next()) idFriendsData = resultSet.getLong("id_user_friends_data");
+            }
+        } catch (SQLException e) {
+            logger.error("Cannot check ufd row exists!", e);
+            throw new DAOException("Cannot check ufd row exists!", e);
+        }
+        return idFriendsData;
     }
 }

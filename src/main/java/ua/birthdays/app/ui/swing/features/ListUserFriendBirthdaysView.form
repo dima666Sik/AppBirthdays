@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="panelListFriendBirthdays" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="20" left="20" bottom="20" right="20"/>
     <constraints>
-      <xy x="20" y="20" width="500" height="430"/>
+      <xy x="20" y="20" width="500" height="500"/>
     </constraints>
     <properties>
       <background color="-12434105"/>
@@ -74,7 +74,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="2700d" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="2700d" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -82,32 +82,50 @@
             <properties/>
             <border type="line" title="Sorted"/>
             <children>
-              <component id="39a33" class="javax.swing.JButton" binding="ascendingButton" default-binding="true">
+              <component id="39a33" class="javax.swing.JButton" binding="ascendingNameFriendButton">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <background color="-12261"/>
-                  <text value="Ascending"/>
+                  <text value="Ascending Name Friend"/>
                 </properties>
               </component>
-              <component id="fc3cd" class="javax.swing.JButton" binding="descendingButton" default-binding="true">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <background color="-12261"/>
-                  <text value="Descending"/>
-                </properties>
-              </component>
-              <component id="3a7b1" class="javax.swing.JButton" binding="defaultButton" default-binding="true">
+              <component id="fc3cd" class="javax.swing.JButton" binding="descendingNameFriendButton">
                 <constraints>
                   <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <background color="-12261"/>
+                  <text value="Descending Name Friend"/>
+                </properties>
+              </component>
+              <component id="3a7b1" class="javax.swing.JButton" binding="defaultButton" default-binding="true">
+                <constraints>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-12261"/>
                   <foreground color="-16777216"/>
                   <text value="Default"/>
+                </properties>
+              </component>
+              <component id="82e7a" class="javax.swing.JButton" binding="ascendingFriendBirthdayDateButton">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-12261"/>
+                  <text value="Ascending Friend`s Birthday Date"/>
+                </properties>
+              </component>
+              <component id="2521d" class="javax.swing.JButton" binding="descendingFriendBirthdayDateButton">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-12261"/>
+                  <text value="Descending Friend`s Birthday Date"/>
                 </properties>
               </component>
             </children>

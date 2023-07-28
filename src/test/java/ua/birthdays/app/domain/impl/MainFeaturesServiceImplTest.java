@@ -2,6 +2,7 @@ package ua.birthdays.app.domain.impl;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ua.birthdays.app.dao.env.PeriodTimeEnum;
 import ua.birthdays.app.domain.interfaces.MainFeaturesService;
 import ua.birthdays.app.models.AboutFriend;
 import ua.birthdays.app.models.FriendBirthdayDate;
@@ -21,7 +22,7 @@ class MainFeaturesServiceImplTest {
 
         FriendBirthdayDate friendBirthdayDate = new FriendBirthdayDate(
                 LocalDate.of(2002, Month.APRIL, 8),
-                9,20, 3);
+                9,20, PeriodTimeEnum.AM, 3);
 
         AboutFriend aboutFriend = new AboutFriend("Dimaaasss Kgl");
         User user = new User("ff", "ff", "ff", "A44BA123189855990795E3260A64B34CDAE6B29BF1C941818A34CBA8BBC45575");
@@ -37,7 +38,7 @@ class MainFeaturesServiceImplTest {
     void createFriendBirthdayDate() {
         FriendBirthdayDate friendBirthdayDate = new FriendBirthdayDate(
                 LocalDate.of(2222, Month.MAY, 18),
-                7,28, 33);
+                7,28, PeriodTimeEnum.PM, 33);
 
         boolean isCreated = mainFeaturesService.createFriendBirthdayDate(friendBirthdayDate);
         Assertions.assertTrue(isCreated);
@@ -56,7 +57,7 @@ class MainFeaturesServiceImplTest {
     void readAllUserFriendsData() {
         User user = new User("ff", "ff", "ff", "A44BA123189855990795E3260A64B34CDAE6B29BF1C941818A34CBA8BBC45575");
 
-        List<UserFriendsData> userFriendsDataList = mainFeaturesService.readAllUserFriendsData(user);
+        List<UserFriendsData> userFriendsDataList = mainFeaturesService.readAllUserFriendsDataByDefault(user);
 
         Assertions.assertNotNull(userFriendsDataList);
     }

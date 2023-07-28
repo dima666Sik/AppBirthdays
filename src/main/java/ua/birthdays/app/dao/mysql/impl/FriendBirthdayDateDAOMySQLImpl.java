@@ -38,7 +38,8 @@ public class FriendBirthdayDateDAOMySQLImpl implements FriendBirthdayDateDAO {
             statement.setDate(1, Date.valueOf(friendBirthdayDate.getFriendDate()));
             statement.setInt(2, friendBirthdayDate.getRemindedFriendHour());
             statement.setInt(3, friendBirthdayDate.getRemindedFriendMinutes());
-            statement.setInt(4, friendBirthdayDate.getRemindedCountDaysBeforeBirthday());
+            statement.setString(4, friendBirthdayDate.getPeriodTimeEnum().name());
+            statement.setInt(5, friendBirthdayDate.getRemindedCountDaysBeforeBirthday());
             if (statement.executeUpdate() > 0) {
                 try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {

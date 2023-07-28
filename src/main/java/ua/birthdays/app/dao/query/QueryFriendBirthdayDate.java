@@ -8,6 +8,7 @@ public class QueryFriendBirthdayDate {
                 "   friend_date date,\n" +
                 "   reminded_friend_hour int(2),\n" +
                 "   reminded_friend_minutes int(2),\n" +
+                "   reminded_period_time_enum varchar(2),\n" +
                 "   reminded_count_days_before_birthday int(3),\n" +
                 "   PRIMARY KEY(id_friend_birthday_date)\n" +
                 "   );";
@@ -15,7 +16,7 @@ public class QueryFriendBirthdayDate {
 
     public static String createFriendBirthdayDate() {
         return "insert into friend_birthday_date (friend_date, reminded_friend_hour, " +
-                "reminded_friend_minutes, reminded_count_days_before_birthday) values (?,?,?,?);";
+                "reminded_friend_minutes, reminded_period_time_enum, reminded_count_days_before_birthday) values (?,?,?,?,?);";
     }
 
 }
