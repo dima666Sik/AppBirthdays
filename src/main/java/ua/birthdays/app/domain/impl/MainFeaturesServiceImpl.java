@@ -124,9 +124,9 @@ public class MainFeaturesServiceImpl implements MainFeaturesService {
     }
 
     @Override
-    public boolean deleteUserFriendsData(User user, String nameFriend, String friendBirthdayDate) {
+    public boolean deleteUserFriendsData(UserFriendsData userFriendsData) {
         try {
-            return userFriendsDataDAO.deleteUserFriendsData(user, nameFriend, friendBirthdayDate);
+            return userFriendsDataDAO.deleteUserFriendsData(userFriendsData);
         } catch (DAOException e) {
             logger.error("Cannot delete user friend's data!", e);
             return false;

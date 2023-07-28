@@ -31,6 +31,8 @@ public class ListUserFriendBirthdaysView extends JDialog {
     private JButton defaultButton;
     private JButton ascendingFriendBirthdayDateButton;
     private JButton descendingFriendBirthdayDateButton;
+    private JLabel labelCurrentUser;
+    private JLabel labelCurrentUserEmail;
     private Object[][] dataUserFriendsBirthdayOnTable;
     private Object[] objectRowUserFriendBirthday;
     private List<UserFriendsData> userFriendsDataList;
@@ -38,8 +40,10 @@ public class ListUserFriendBirthdaysView extends JDialog {
     public ListUserFriendBirthdaysView(User user) {
         setUndecorated(true);
         setContentPane(panelListFriendBirthdays);
+        labelCurrentUser.setText(user.getFirstName().concat(","));
+        labelCurrentUserEmail.setText(user.getEmail());
         createTable(user);
-        setMinimumSize(new Dimension(580, 500));
+        setMinimumSize(new Dimension(880, 500));
 
         setModal(true);
         setLocationRelativeTo(null);
@@ -126,10 +130,30 @@ public class ListUserFriendBirthdaysView extends JDialog {
         deleteButton.addActionListener(e -> {
             if (table.getSelectedRow() != -1) {
                 objectRowUserFriendBirthday = dataUserFriendsBirthdayOnTable[table.getSelectedRow()];
+                LocalDate friendBirthdayDate = LocalDate.parse(objectRowUserFriendBirthday[2].toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.getDefault()));
 
-                if (mainFeaturesService.deleteUserFriendsData(user, objectRowUserFriendBirthday[1].toString(), objectRowUserFriendBirthday[2].toString())) {
-                    updateUserFriendsDataListAfterEditOrDelete();
+                if (!mainFeaturesService.deleteUserFriendsData(new UserFriendsData(
+                        new FriendBirthdayDate(friendBirthdayDate,
+                                Integer.parseInt(objectRowUserFriendBirthday[3].toString()),
+                                Integer.parseInt(objectRowUserFriendBirthday[4].toString()),
+                                PeriodTimeEnum.valueOf(objectRowUserFriendBirthday[5].toString()),
+                                Integer.parseInt(objectRowUserFriendBirthday[6].toString())
+                        ),
+                        new AboutFriend(objectRowUserFriendBirthday[1].toString()),
+                        user
+                ))) {
+                    JOptionPane.showMessageDialog(this,
+                            "Deleting select User Friend Birthday was unsuccessful!",
+                            "Try again",
+                            JOptionPane.ERROR_MESSAGE);
+                return;
                 }
+
+                userFriendsDataList.remove(table.getSelectedRow());
+
+                dataUserFriendsBirthdayOnTable = dataTableModelInit(userFriendsDataList);
+
+                setDataTableModel(dataUserFriendsBirthdayOnTable);
             }
         });
 
@@ -142,10 +166,6 @@ public class ListUserFriendBirthdaysView extends JDialog {
             dispose();
             new HomeView();
         });
-
-    }
-
-    private void updateUserFriendsDataListAfterEditOrDelete() {
 
     }
 

@@ -105,6 +105,34 @@ public class EditUserFriendBirthdayView extends JDialog {
             return;
         }
 
+        int remindingHour = Integer.parseInt(textFieldRemindingHour.getText());
+        int remindingMinutes = Integer.parseInt(textFieldRemindingMinutes.getText());
+        int remindingCountDaysBeforeBirthday = Integer.parseInt(textFieldRemindingCountDaysBeforeBirthday.getText());
+
+        if (remindingHour < 0 || remindingHour > 12) {
+            JOptionPane.showMessageDialog(this,
+                    "Hour can not be upper than 12 and less 0!",
+                    "Try again",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (remindingMinutes < 0 || remindingMinutes > 59) {
+            JOptionPane.showMessageDialog(this,
+                    "Minutes can not be upper than 59 and less 0!",
+                    "Try again",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (remindingCountDaysBeforeBirthday < 0 || remindingCountDaysBeforeBirthday > 10) {
+            JOptionPane.showMessageDialog(this,
+                    "Reminding Count Days Before Birthday can not be upper than 10 and less 0!",
+                    "Try again",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         if (!mainFeaturesService.updateUserFriendsData(userFriendsData,
                 new UserFriendsData(
                         new FriendBirthdayDate(
@@ -124,7 +152,7 @@ public class EditUserFriendBirthdayView extends JDialog {
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
-        new ListUserFriendBirthdaysView(userFriendsData.getUser());
         dispose();
+        new ListUserFriendBirthdaysView(userFriendsData.getUser());
     }
 }

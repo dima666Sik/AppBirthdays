@@ -39,7 +39,7 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
             }
         }
 
-        if(UtilDAO.isUserFriendsDataRowExists(idUser,userFriendsData.getAboutFriend().getNameFriend(),userFriendsData.getFriendBirthdayDate().getFriendDate())){
+        if (UtilDAO.isUserFriendsDataRowExists(idUser, userFriendsData.getAboutFriend().getNameFriend(), userFriendsData.getFriendBirthdayDate().getFriendDate())) {
             logger.warn("You have the same info into table about ufd!");
             return false;
         }
@@ -48,7 +48,7 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
              PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.createUserFriendsData())) {
             statement.setLong(1, idAboutFriendRow);
             statement.setLong(2, idFriendBirthdayDateRow);
-            statement.setLong(3,idUser);
+            statement.setLong(3, idUser);
             statement.executeUpdate();
             logger.info("Create createUserFriendsData was successful!");
         } catch (SQLException e) {
@@ -254,9 +254,14 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
     @Override
     public boolean updateUserFriendsData(UserFriendsData oldUserFriendsData, UserFriendsData newUserFriendsData) throws DAOException {
         long idUser = ReadIdMySQL.readIdUser(newUserFriendsData.getUser().getEmail(), newUserFriendsData.getUser().getPassword());
+
+        if (UtilDAO.isUserFriendsDataRowExists(idUser, newUserFriendsData.getAboutFriend().getNameFriend(), newUserFriendsData.getFriendBirthdayDate().getFriendDate())) {
+            logger.warn("You have the same info into table about ufd!");
+            return false;
+        }
+
         try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.updateUserFriendsDataByIdUserFriendDateAndUserIdAndFriendDateAndFriendName())) {
-            System.out.println("++++++++++++"+String.valueOf(oldUserFriendsData.getFriendBirthdayDate().getFriendDate()));
+             PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.updateUserFriendsDataByIdUserFriendDate())) {
             statement.setDate(1, Date.valueOf(newUserFriendsData.getFriendBirthdayDate().getFriendDate()));
             statement.setInt(2, newUserFriendsData.getFriendBirthdayDate().getRemindedFriendHour());
             statement.setInt(3, newUserFriendsData.getFriendBirthdayDate().getRemindedFriendMinutes());
@@ -265,26 +270,26 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
             statement.setString(6, newUserFriendsData.getAboutFriend().getNameFriend());
             statement.setLong(7, ReadIdMySQL.readIdFriendsDataRowByIdUserAndFriendNameAndDateFriendBirthday(idUser, oldUserFriendsData.getAboutFriend().getNameFriend(), String.valueOf(oldUserFriendsData.getFriendBirthdayDate().getFriendDate())));
             statement.executeUpdate();
-            logger.info("Create createUserFriendsData was successful!");
+            logger.info("Edit User's Friend Data was successful!");
         } catch (SQLException e) {
-            logger.error("Cannot create createUserFriendsData!", e);
-            throw new DAOException("Cannot create createUserFriendsData!", e);
+            logger.error("Cannot Edit User's Friend Data!", e);
+            throw new DAOException("Cannot Edit User's Friend Data!", e);
         }
         return true;
     }
 
     @Override
-    public boolean deleteUserFriendsData(User user, String nameFriend, String friendBirthdayDate) throws DAOException {
+    public boolean deleteUserFriendsData(UserFriendsData userFriendsData) throws DAOException {
+        long idUser = ReadIdMySQL.readIdUser(userFriendsData.getUser().getEmail(), userFriendsData.getUser().getPassword());
+
         try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.existsByUserIdAndFriendNameAndFriendDate())) {
-            statement.setLong(1, ReadIdMySQL.readIdUser(user.getEmail(),user.getPassword()));
-            statement.setString(2, nameFriend);
-            statement.setDate(3, Date.valueOf(friendBirthdayDate));
+             PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.deleteUserFriendsDataByIdUserFriendDate())) {
+            statement.setLong(1, ReadIdMySQL.readIdFriendsDataRowByIdUserAndFriendNameAndDateFriendBirthday(idUser, userFriendsData.getAboutFriend().getNameFriend(), String.valueOf(userFriendsData.getFriendBirthdayDate().getFriendDate())));
             statement.executeUpdate();
-            logger.info("Create createUserFriendsData was successful!");
+            logger.info("Delete User's Friend Data was successful!");
         } catch (SQLException e) {
-            logger.error("Cannot create createUserFriendsData!", e);
-            throw new DAOException("Cannot create createUserFriendsData!", e);
+            logger.error("Cannot Delete User's Friend Data!", e);
+            throw new DAOException("Cannot Delete User's Friend Data!", e);
         }
         return true;
     }

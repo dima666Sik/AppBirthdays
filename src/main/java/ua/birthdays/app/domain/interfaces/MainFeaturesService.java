@@ -17,5 +17,5 @@ public interface MainFeaturesService {
     List<UserFriendsData> readAllUserFriendsDataAscendingByNameFriend(User user);
     List<UserFriendsData> readAllUserFriendsDataByDefault(User user);
     boolean updateUserFriendsData(UserFriendsData oldUserFriendsData, UserFriendsData newUserFriendsData);
-    boolean deleteUserFriendsData(User user, String nameFriend, String friendBirthdayDate);
+    boolean deleteUserFriendsData(UserFriendsData userFriendsData);
 }

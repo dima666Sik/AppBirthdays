@@ -67,7 +67,7 @@ public class QueryUserFriendsData {
                 "where user_friends_data.id_user=(?) and about_friend.name_friend=(?) and friend_birthday_date.friend_date=(?);";
     }
 
-    public static String updateUserFriendsDataByIdUserFriendDateAndUserIdAndFriendDateAndFriendName(){
+    public static String updateUserFriendsDataByIdUserFriendDate(){
         return "UPDATE user_friends_data\n" +
                 "JOIN friend_birthday_date ON user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date\n" +
                 "JOIN about_friend ON user_friends_data.id_about_friend = about_friend.id_about_friend\n" +
@@ -78,5 +78,14 @@ public class QueryUserFriendsData {
                 "\tfriend_birthday_date.reminded_count_days_before_birthday = (?),\n" +
                 "\tabout_friend.name_friend = (?)\n" +
                 "WHERE user_friends_data.id_user_friends_data = (?)\n";
+    }
+
+    public static String deleteUserFriendsDataByIdUserFriendDate(){
+        return "delete user_friends_data, friend_birthday_date, about_friend\n" +
+                "FROM user_friends_data\n" +
+                "JOIN friend_birthday_date ON user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date\n" +
+                "JOIN about_friend ON user_friends_data.id_about_friend = about_friend.id_about_friend\n" +
+                "WHERE \n" +
+                "\tuser_friends_data.id_user_friends_data = (?)\n";
     }
 }

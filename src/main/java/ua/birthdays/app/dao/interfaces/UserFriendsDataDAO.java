@@ -14,5 +14,5 @@ public interface UserFriendsDataDAO {
     List<UserFriendsData> readAllUserFriendsDataDescendingByNameFriend(User user)throws DAOException;
     List<UserFriendsData> readAllUserFriendsDataAscendingByNameFriend(User user)throws DAOException;
     boolean updateUserFriendsData(UserFriendsData oldUserFriendsData, UserFriendsData newUserFriendsData) throws DAOException;
-    boolean deleteUserFriendsData(User user, String nameFriend, String friendBirthdayDate) throws DAOException;
+    boolean deleteUserFriendsData(UserFriendsData userFriendsData) throws DAOException;
 }
