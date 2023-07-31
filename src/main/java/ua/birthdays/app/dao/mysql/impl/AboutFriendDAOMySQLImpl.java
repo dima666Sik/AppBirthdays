@@ -5,14 +5,10 @@ import org.apache.logging.log4j.Logger;
 import ua.birthdays.app.dao.env.EnumDBNameTables;
 import ua.birthdays.app.dao.exceptions.DAOException;
 import ua.birthdays.app.dao.interfaces.AboutFriendDAO;
-import ua.birthdays.app.dao.interfaces.FriendBirthdayDateDAO;
 import ua.birthdays.app.dao.query.QueryAboutFriend;
-import ua.birthdays.app.dao.query.QueryFriendBirthdayDate;
-import ua.birthdays.app.dao.query.QueryUserFriendsData;
 import ua.birthdays.app.dao.util.DBConnector;
 import ua.birthdays.app.dao.util.UtilDAO;
 import ua.birthdays.app.models.AboutFriend;
-import ua.birthdays.app.models.FriendBirthdayDate;
 
 import java.sql.*;
 
@@ -32,9 +28,9 @@ public class AboutFriendDAOMySQLImpl implements AboutFriendDAO {
             }
         }
 
-        try(Connection connection = DBConnector.getConnection();
+        try (Connection connection = DBConnector.getConnection();
 
-            PreparedStatement statement = connection.prepareStatement(QueryAboutFriend.createAboutFriend(), Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement statement = connection.prepareStatement(QueryAboutFriend.createAboutFriend(), Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, aboutFriend.getNameFriend());
 
             if (statement.executeUpdate() > 0) {
@@ -51,7 +47,7 @@ public class AboutFriendDAOMySQLImpl implements AboutFriendDAO {
                 logger.info("Row is not added!");
                 return -1;
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             logger.error("Cannot create AboutFriend!", e);
             throw new DAOException("Cannot create AboutFriend!", e);
         }

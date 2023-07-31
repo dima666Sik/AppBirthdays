@@ -32,10 +32,10 @@ public class UtilDAO {
     }
 
     public static boolean isUserFriendsDataRowExists(long idUser, String friendsName, LocalDate dateFriendBirthday) throws DAOException {
-        try(Connection connection = DBConnector.getConnection();
-            PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.existsByUserIdAndFriendNameAndFriendDate())){
-            statement.setLong(1,idUser);
-            statement.setString(2,friendsName);
+        try (Connection connection = DBConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.existsByUserIdAndFriendNameAndFriendDate())) {
+            statement.setLong(1, idUser);
+            statement.setString(2, friendsName);
             statement.setDate(3, Date.valueOf(dateFriendBirthday));
             return statement.executeQuery().next();
         } catch (SQLException e) {

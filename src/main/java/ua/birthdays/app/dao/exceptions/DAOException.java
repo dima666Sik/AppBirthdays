@@ -1,6 +1,6 @@
 package ua.birthdays.app.dao.exceptions;
 
-public class DAOException extends Exception{
+public class DAOException extends Exception {
     public DAOException() {
     }
 

@@ -28,6 +28,7 @@ public class AuthorizationView extends JDialog {
         previousButton.addActionListener(e -> {
             dispose();
             new HomeView();
+
         });
 
         confirmAuthorizationButton.addActionListener(e -> authorization());

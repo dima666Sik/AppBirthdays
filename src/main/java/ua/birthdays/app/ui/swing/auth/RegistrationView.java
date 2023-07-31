@@ -37,9 +37,7 @@ public class RegistrationView extends JDialog {
             new AuthorizationView();
         });
 
-        confirmRegistrationButton.addActionListener(e -> {
-            confirmRegistration();
-        });
+        confirmRegistrationButton.addActionListener(e -> confirmRegistration());
 
         setVisible(true);
     }

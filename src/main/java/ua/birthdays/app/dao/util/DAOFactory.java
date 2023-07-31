@@ -13,7 +13,16 @@ public class DAOFactory {
     public static UserDAO getUserAuthDao() {
         return new UserDAOMySQLImpl();
     }
-    public static UserFriendsDataDAO getUserFriendsDataDAO(){return new UserFriendsDataDAOMySQLImpl();}
-    public static FriendBirthdayDateDAO getFriendBirthdayDate(){return new FriendBirthdayDateDAOMySQLImpl();}
-    public static AboutFriendDAO getAboutFriend(){return new AboutFriendDAOMySQLImpl();}
+
+    public static UserFriendsDataDAO getUserFriendsDataDAO() {
+        return new UserFriendsDataDAOMySQLImpl();
+    }
+
+    public static FriendBirthdayDateDAO getFriendBirthdayDate() {
+        return new FriendBirthdayDateDAOMySQLImpl();
+    }
+
+    public static AboutFriendDAO getAboutFriend() {
+        return new AboutFriendDAOMySQLImpl();
+    }
 }

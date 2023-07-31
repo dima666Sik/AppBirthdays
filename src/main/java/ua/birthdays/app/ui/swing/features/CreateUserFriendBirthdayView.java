@@ -8,7 +8,7 @@ import ua.birthdays.app.models.AboutFriend;
 import ua.birthdays.app.models.FriendBirthdayDate;
 import ua.birthdays.app.models.User;
 import ua.birthdays.app.models.UserFriendsData;
-import ua.birthdays.app.ui.swing.util.UtilFormImpl;
+import ua.birthdays.app.ui.swing.util.UtilForm;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +29,6 @@ public class CreateUserFriendBirthdayView extends JDialog {
     private final JDateChooser jDateChooser = new JDateChooser(calendar.getTime());
 
     public CreateUserFriendBirthdayView(User user) {
-        setUndecorated(true);
         setContentPane(panelCreateUserFriendBirthday);
 
         setMinimumSize(new Dimension(580, 500));
@@ -37,14 +36,9 @@ public class CreateUserFriendBirthdayView extends JDialog {
         jDateChooser.setDateFormatString("yyyy-MM-dd");
         jPicker.add(jDateChooser);
 
-        confirmButton.addActionListener(e -> {
-            createUserFriendBirthday(user);
-        });
+        confirmButton.addActionListener(e -> createUserFriendBirthday(user));
 
-        cancelButton.addActionListener(e -> {
-            dispose();
-            new ListUserFriendBirthdaysView(user);
-        });
+        cancelButton.addActionListener(e -> dispose());
 
         setModal(true);
         setLocationRelativeTo(null);
@@ -66,9 +60,9 @@ public class CreateUserFriendBirthdayView extends JDialog {
             return;
         }
 
-        if (!UtilFormImpl.isNumber(textFieldRemindingHour.getText()) ||
-                !UtilFormImpl.isNumber(textFieldRemindingMinutes.getText()) ||
-                !UtilFormImpl.isNumber(textFieldRemindingCountDaysBeforeBirthday.getText())
+        if (!UtilForm.isNumber(textFieldRemindingHour.getText()) ||
+                !UtilForm.isNumber(textFieldRemindingMinutes.getText()) ||
+                !UtilForm.isNumber(textFieldRemindingCountDaysBeforeBirthday.getText())
         ) {
             JOptionPane.showMessageDialog(this,
                     "Please remove letters from fields where you have to write numbers!",
@@ -126,7 +120,6 @@ public class CreateUserFriendBirthdayView extends JDialog {
             return;
         }
         dispose();
-        new ListUserFriendBirthdaysView(user);
     }
 
 }

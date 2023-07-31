@@ -59,7 +59,7 @@ public class QueryUserFriendsData {
                 "where user_friends_data.id_user=(?) order by friend_birthday_date.friend_date DESC;";
     }
 
-    public static String existsByUserIdAndFriendNameAndFriendDate(){
+    public static String existsByUserIdAndFriendNameAndFriendDate() {
         return "select id_user_friends_data\n" +
                 "from user_friends_data \n" +
                 "left join friend_birthday_date on user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date \n" +
@@ -67,7 +67,7 @@ public class QueryUserFriendsData {
                 "where user_friends_data.id_user=(?) and about_friend.name_friend=(?) and friend_birthday_date.friend_date=(?);";
     }
 
-    public static String updateUserFriendsDataByIdUserFriendDate(){
+    public static String updateUserFriendsDataByIdUserFriendDate() {
         return "UPDATE user_friends_data\n" +
                 "JOIN friend_birthday_date ON user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date\n" +
                 "JOIN about_friend ON user_friends_data.id_about_friend = about_friend.id_about_friend\n" +
@@ -80,7 +80,7 @@ public class QueryUserFriendsData {
                 "WHERE user_friends_data.id_user_friends_data = (?)\n";
     }
 
-    public static String deleteUserFriendsDataByIdUserFriendDate(){
+    public static String deleteUserFriendsDataByIdUserFriendDate() {
         return "delete user_friends_data, friend_birthday_date, about_friend\n" +
                 "FROM user_friends_data\n" +
                 "JOIN friend_birthday_date ON user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date\n" +

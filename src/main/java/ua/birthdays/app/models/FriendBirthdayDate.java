@@ -3,6 +3,7 @@ package ua.birthdays.app.models;
 import ua.birthdays.app.dao.env.PeriodTimeEnum;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class FriendBirthdayDate {
     private final LocalDate friendDate;
@@ -39,6 +40,19 @@ public class FriendBirthdayDate {
 
     public PeriodTimeEnum getPeriodTimeEnum() {
         return periodTimeEnum;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FriendBirthdayDate that = (FriendBirthdayDate) o;
+        return remindedFriendHour == that.remindedFriendHour && remindedFriendMinutes == that.remindedFriendMinutes && remindedCountDaysBeforeBirthday == that.remindedCountDaysBeforeBirthday && Objects.equals(friendDate, that.friendDate) && periodTimeEnum == that.periodTimeEnum;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(friendDate, remindedFriendHour, remindedFriendMinutes, periodTimeEnum, remindedCountDaysBeforeBirthday);
     }
 
     @Override

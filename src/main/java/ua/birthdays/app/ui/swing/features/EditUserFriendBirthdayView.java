@@ -6,9 +6,8 @@ import ua.birthdays.app.domain.impl.MainFeaturesServiceImpl;
 import ua.birthdays.app.domain.interfaces.MainFeaturesService;
 import ua.birthdays.app.models.AboutFriend;
 import ua.birthdays.app.models.FriendBirthdayDate;
-import ua.birthdays.app.models.User;
 import ua.birthdays.app.models.UserFriendsData;
-import ua.birthdays.app.ui.swing.util.UtilFormImpl;
+import ua.birthdays.app.ui.swing.util.UtilForm;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,11 +26,10 @@ public class EditUserFriendBirthdayView extends JDialog {
     private JPanel jPicker;
     private JPanel panelEditUserFriendBirthday;
 
-    private Calendar calendar = Calendar.getInstance();
+    private final Calendar calendar = Calendar.getInstance();
     private final JDateChooser jDateChooser = new JDateChooser(calendar.getTime());
 
     public EditUserFriendBirthdayView(UserFriendsData userFriendsData) {
-        setUndecorated(true);
         setContentPane(panelEditUserFriendBirthday);
 
         setMinimumSize(new Dimension(580, 500));
@@ -47,7 +45,6 @@ public class EditUserFriendBirthdayView extends JDialog {
 
         cancelButton.addActionListener(e -> {
             dispose();
-            new ListUserFriendBirthdaysView(userFriendsData.getUser());
         });
 
         setModal(true);
@@ -62,7 +59,7 @@ public class EditUserFriendBirthdayView extends JDialog {
         textFieldRemindingHour.setText(String.valueOf(userFriendsData.getFriendBirthdayDate().getRemindedFriendHour()));
         textFieldRemindingMinutes.setText(String.valueOf(userFriendsData.getFriendBirthdayDate().getRemindedFriendMinutes()));
         textFieldRemindingCountDaysBeforeBirthday.setText(String.valueOf(userFriendsData.getFriendBirthdayDate().getRemindedCountDaysBeforeBirthday()));
-        comboBoxPeriodTime.setSelectedItem(userFriendsData.getFriendBirthdayDate().getPeriodTimeEnum());
+        comboBoxPeriodTime.setSelectedItem(userFriendsData.getFriendBirthdayDate().getPeriodTimeEnum().name());
         jDateChooser.setDate(Date.from(userFriendsData.getFriendBirthdayDate().getFriendDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
     }
 
@@ -94,9 +91,9 @@ public class EditUserFriendBirthdayView extends JDialog {
             return;
         }
 
-        if (!UtilFormImpl.isNumber(textFieldRemindingHour.getText()) ||
-                !UtilFormImpl.isNumber(textFieldRemindingMinutes.getText()) ||
-                !UtilFormImpl.isNumber(textFieldRemindingCountDaysBeforeBirthday.getText())
+        if (!UtilForm.isNumber(textFieldRemindingHour.getText()) ||
+                !UtilForm.isNumber(textFieldRemindingMinutes.getText()) ||
+                !UtilForm.isNumber(textFieldRemindingCountDaysBeforeBirthday.getText())
         ) {
             JOptionPane.showMessageDialog(this,
                     "Please remove letters from fields where you have to write numbers!",
@@ -153,6 +150,5 @@ public class EditUserFriendBirthdayView extends JDialog {
             return;
         }
         dispose();
-        new ListUserFriendBirthdaysView(userFriendsData.getUser());
     }
 }

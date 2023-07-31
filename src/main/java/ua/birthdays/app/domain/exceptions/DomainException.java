@@ -1,6 +1,6 @@
 package ua.birthdays.app.domain.exceptions;
 
-public class DomainException extends Exception{
+public class DomainException extends Exception {
     public DomainException() {
     }
 

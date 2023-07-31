@@ -25,7 +25,7 @@ class MainFeaturesServiceImplTest {
                 9,20, PeriodTimeEnum.AM, 3);
 
         AboutFriend aboutFriend = new AboutFriend("Dimaaasss Kgl");
-        User user = new User("ff", "ff", "ff", "A44BA123189855990795E3260A64B34CDAE6B29BF1C941818A34CBA8BBC45575");
+        User user = new User("Dima", "Kohol", "leniv@gmail.com", "B32914CD620087FA50645BBBA8268FC3BC9D92AEB427BC6B985477B9B4A65830");
 
         UserFriendsData userFriendsData = new UserFriendsData(friendBirthdayDate,aboutFriend,user);
 

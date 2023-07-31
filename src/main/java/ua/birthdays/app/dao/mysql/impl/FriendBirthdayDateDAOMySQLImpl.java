@@ -5,17 +5,12 @@ import org.apache.logging.log4j.Logger;
 import ua.birthdays.app.dao.env.EnumDBNameTables;
 import ua.birthdays.app.dao.exceptions.DAOException;
 import ua.birthdays.app.dao.interfaces.FriendBirthdayDateDAO;
-import ua.birthdays.app.dao.interfaces.UserFriendsDataDAO;
-import ua.birthdays.app.dao.query.QueryAboutFriend;
 import ua.birthdays.app.dao.query.QueryFriendBirthdayDate;
-import ua.birthdays.app.dao.query.QueryUserFriendsData;
 import ua.birthdays.app.dao.util.DBConnector;
 import ua.birthdays.app.dao.util.UtilDAO;
 import ua.birthdays.app.models.FriendBirthdayDate;
-import ua.birthdays.app.models.UserFriendsData;
 
 import java.sql.*;
-import java.util.List;
 
 public class FriendBirthdayDateDAOMySQLImpl implements FriendBirthdayDateDAO {
     private final static Logger logger = LogManager.getLogger(FriendBirthdayDateDAOMySQLImpl.class.getName());
@@ -33,8 +28,8 @@ public class FriendBirthdayDateDAOMySQLImpl implements FriendBirthdayDateDAO {
             }
         }
 
-        try(Connection connection = DBConnector.getConnection();
-            PreparedStatement statement = connection.prepareStatement(QueryFriendBirthdayDate.createFriendBirthdayDate(), Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = DBConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(QueryFriendBirthdayDate.createFriendBirthdayDate(), Statement.RETURN_GENERATED_KEYS)) {
             statement.setDate(1, Date.valueOf(friendBirthdayDate.getFriendDate()));
             statement.setInt(2, friendBirthdayDate.getRemindedFriendHour());
             statement.setInt(3, friendBirthdayDate.getRemindedFriendMinutes());
@@ -54,7 +49,7 @@ public class FriendBirthdayDateDAOMySQLImpl implements FriendBirthdayDateDAO {
                 logger.info("Row is not added!");
                 return -1;
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             logger.error("Cannot create FriendBirthdayDate!", e);
             throw new DAOException("Cannot create FriendBirthdayDate!", e);
         }

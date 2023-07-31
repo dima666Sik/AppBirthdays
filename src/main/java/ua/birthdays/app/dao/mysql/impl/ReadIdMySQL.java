@@ -3,17 +3,12 @@ package ua.birthdays.app.dao.mysql.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.birthdays.app.dao.exceptions.DAOException;
-import ua.birthdays.app.dao.query.QueryAboutFriend;
-import ua.birthdays.app.dao.query.QueryFriendBirthdayDate;
 import ua.birthdays.app.dao.query.QueryUser;
 import ua.birthdays.app.dao.query.QueryUserFriendsData;
 import ua.birthdays.app.dao.util.DBConnector;
-import ua.birthdays.app.models.FriendBirthdayDate;
-import ua.birthdays.app.models.User;
 
 import java.io.FileReader;
 import java.sql.*;
-import java.time.LocalDate;
 
 public class ReadIdMySQL {
 
@@ -43,12 +38,12 @@ public class ReadIdMySQL {
 
     public static long readIdFriendsDataRowByIdUserAndFriendNameAndDateFriendBirthday(long idUser, String friendsName, String dateFriendBirthday) throws DAOException {
         long idFriendsData = 0;
-        try(Connection connection = DBConnector.getConnection();
-            PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.existsByUserIdAndFriendNameAndFriendDate())){
-            statement.setLong(1,idUser);
-            statement.setString(2,friendsName);
+        try (Connection connection = DBConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.existsByUserIdAndFriendNameAndFriendDate())) {
+            statement.setLong(1, idUser);
+            statement.setString(2, friendsName);
             statement.setDate(3, Date.valueOf(dateFriendBirthday));
-            try (ResultSet resultSet = statement.executeQuery()){
+            try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) idFriendsData = resultSet.getLong("id_user_friends_data");
             }
         } catch (SQLException e) {
