@@ -7,6 +7,9 @@ import java.io.InputStream;
 
 import java.util.Properties;
 
+/**
+ * Custom extension of the {@link Properties} class for loading properties from a file.
+ */
 public class PropertiesFile extends Properties {
 
     public void load(String fileName) throws DAOException {

@@ -17,6 +17,9 @@ import ua.birthdays.app.models.UserFriendsData;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+/**
+ * Implementation of the {@link FileWriterService} interface that writes user friend birthday data into a PDF file.
+ */
 public class PDFWriterServiceImpl implements FileWriterService {
     @Override
     public void writeDataIntoFile(String patch, List<UserFriendsData> userFriendsDataList) throws DomainException {

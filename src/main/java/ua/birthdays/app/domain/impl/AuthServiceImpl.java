@@ -10,6 +10,9 @@ import ua.birthdays.app.models.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Implementation of {@link AuthService} interface for user authentication and registration.
+ */
 public class AuthServiceImpl implements AuthService {
     private final static Logger logger = LogManager.getLogger(AuthServiceImpl.class.getName());
 
@@ -20,6 +23,14 @@ public class AuthServiceImpl implements AuthService {
         logger.info("Getting user auth instance!");
     }
 
+    /**
+     * Implementation of the new user registration method.
+     * @param firstName username
+     * @param lastName last name of the user
+     * @param email the user's email
+     * @param password user password (array of characters)
+     * @return true if registration was successful, otherwise false
+     */
     @Override
     public boolean registration(String firstName, String lastName, String email, char[] password) {
 
@@ -37,6 +48,12 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
+    /**
+     * Implementation of the user authorization method.
+     * @param email the user's email
+     * @param password user password (array of characters)
+     * @return a user object if authentication succeeds, or null if the user is not found or authentication fails
+     */
     @Override
     public User authorization(String email, char[] password) {
         User user = null;

@@ -7,6 +7,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 
+/**
+ * The MP3Player class implements the {@link Audio} interface and provides functionality for playing audio in MP3 format.
+ */
 public class MP3Player implements Audio {
     private final static Logger logger = LogManager.getLogger(MP3Player.class.getName());
 

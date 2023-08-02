@@ -7,6 +7,7 @@ import ua.birthdays.app.dao.interfaces.AboutFriendDAO;
 import ua.birthdays.app.dao.interfaces.FriendBirthdayDateDAO;
 import ua.birthdays.app.dao.interfaces.UserFriendsDataDAO;
 import ua.birthdays.app.dao.util.DAOFactory;
+import ua.birthdays.app.domain.interfaces.FileWriterService;
 import ua.birthdays.app.domain.interfaces.MainFeaturesService;
 import ua.birthdays.app.models.AboutFriend;
 import ua.birthdays.app.models.FriendBirthdayDate;
@@ -15,6 +16,10 @@ import ua.birthdays.app.models.UserFriendsData;
 
 import java.util.List;
 
+/**
+ * Implementation of the {@link MainFeaturesService} interface that provides various operations
+ * for managing user friend's data.
+ */
 public class MainFeaturesServiceImpl implements MainFeaturesService {
     private final static Logger logger = LogManager.getLogger(MainFeaturesServiceImpl.class.getName());
 
@@ -28,6 +33,12 @@ public class MainFeaturesServiceImpl implements MainFeaturesService {
         aboutFriendDAO = DAOFactory.getAboutFriend();
     }
 
+    /**
+     * Creates user friend's data by persisting relevant information into the database.
+     *
+     * @param userFriendsData The user friend's data to be created.
+     * @return True if the creation was successful, otherwise false.
+     */
     @Override
     public boolean createUserFriendsData(UserFriendsData userFriendsData) {
         try {
@@ -43,6 +54,12 @@ public class MainFeaturesServiceImpl implements MainFeaturesService {
         }
     }
 
+    /**
+     * Creates friend's birthday date by persisting relevant information into the database.
+     *
+     * @param friendBirthdayDate The friend's birthday date to be created.
+     * @return True if the creation was successful, otherwise false.
+     */
     @Override
     public boolean createFriendBirthdayDate(FriendBirthdayDate friendBirthdayDate) {
         try {
@@ -53,6 +70,12 @@ public class MainFeaturesServiceImpl implements MainFeaturesService {
         }
     }
 
+    /**
+     * Creates friend's about by persisting relevant information into the database.
+     *
+     * @param aboutFriend The friend's about to be created.
+     * @return True if the creation was successful, otherwise false.
+     */
     @Override
     public boolean createAboutFriend(AboutFriend aboutFriend) {
         try {
@@ -113,6 +136,7 @@ public class MainFeaturesServiceImpl implements MainFeaturesService {
         }
     }
 
+
     @Override
     public boolean updateUserFriendsData(UserFriendsData oldUserFriendsData, UserFriendsData newUserFriendsData) {
         try {
@@ -123,6 +147,12 @@ public class MainFeaturesServiceImpl implements MainFeaturesService {
         }
     }
 
+    /**
+     * Deletes user friend's data from the database.
+     *
+     * @param userFriendsData The user friend's data to be deleted.
+     * @return True if the deletion was successful, otherwise false.
+     */
     @Override
     public boolean deleteUserFriendsData(UserFriendsData userFriendsData) {
         try {

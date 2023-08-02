@@ -16,10 +16,7 @@ import ua.birthdays.app.ui.swing.menuview.HomeView;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -40,7 +37,7 @@ public class ListUserFriendBirthdaysView extends JFrame {
     private JButton deleteButton;
     private JButton addButton;
     private JButton exitButton;
-    private JButton editButton;
+    private JButton copyButton;
     private JButton defaultButton;
     private JButton ascendingFriendBirthdayDateButton;
     private JButton descendingFriendBirthdayDateButton;
@@ -50,6 +47,7 @@ public class ListUserFriendBirthdaysView extends JFrame {
     private JLabel minimizeWin;
     private JButton downloadFriendSBirthdaysCSVButton;
     private JButton downloadFriendSBirthdaysPDFButton;
+    private JPanel panelScrollTable;
     private Object[][] dataUserFriendsBirthdayOnTable;
     private Object[] objectRowUserFriendBirthday;
     private final Audio audioCongratulationsMP3 = new MP3Player("src/main/resources/sounds/congratulations_sound.mp3");
@@ -65,7 +63,7 @@ public class ListUserFriendBirthdaysView extends JFrame {
         setContentPane(panelListFriendBirthdays);
         labelCurrentUser.setText(user.getFirstName().concat(","));
         labelCurrentUserEmail.setText(user.getEmail());
-        startRemainingService();
+//        startRemainingService();
         createTable();
         setMinimumSize(new Dimension(1080, 600));
         setLocationRelativeTo(null);
@@ -161,26 +159,30 @@ public class ListUserFriendBirthdaysView extends JFrame {
 
         defaultButton.addActionListener(e -> chooseSortedByEnum(EnumStateSorted.DEFAULT));
 
-        editButton.addActionListener(e -> {
-            if (table.getSelectedRow() == -1) return;
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    if (table.getSelectedRow() == -1) return;
 
-            objectRowUserFriendBirthday = dataUserFriendsBirthdayOnTable[table.getSelectedRow()];
-            LocalDate oldVersionDate = LocalDate.parse(objectRowUserFriendBirthday[2].toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.getDefault()));
+                    objectRowUserFriendBirthday = dataUserFriendsBirthdayOnTable[table.getSelectedRow()];
+                    LocalDate oldVersionDate = LocalDate.parse(objectRowUserFriendBirthday[2].toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.getDefault()));
 
-            new EditUserFriendBirthdayView(
-                    new UserFriendsData(
-                            new FriendBirthdayDate(oldVersionDate,
-                                    Integer.parseInt(objectRowUserFriendBirthday[3].toString()),
-                                    Integer.parseInt(objectRowUserFriendBirthday[4].toString()),
-                                    PeriodTimeEnum.valueOf(objectRowUserFriendBirthday[5].toString()),
-                                    Integer.parseInt(objectRowUserFriendBirthday[6].toString())
-                            ),
-                            new AboutFriend(objectRowUserFriendBirthday[1].toString()),
-                            user
-                    )
-            );
-
-            chooseSortedByEnum(enumStateSorted);
+                    new EditUserFriendBirthdayView(
+                            new UserFriendsData(
+                                    new FriendBirthdayDate(oldVersionDate,
+                                            Integer.parseInt(objectRowUserFriendBirthday[3].toString()),
+                                            Integer.parseInt(objectRowUserFriendBirthday[4].toString()),
+                                            PeriodTimeEnum.valueOf(objectRowUserFriendBirthday[5].toString()),
+                                            Integer.parseInt(objectRowUserFriendBirthday[6].toString())
+                                    ),
+                                    new AboutFriend(objectRowUserFriendBirthday[1].toString()),
+                                    user
+                            )
+                    );
+                    chooseSortedByEnum(enumStateSorted);
+                }
+            }
         });
 
         deleteButton.addActionListener(e -> {
@@ -213,7 +215,7 @@ public class ListUserFriendBirthdaysView extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
+            objectRowUserFriendBirthday = null;
             chooseSortedByEnum(enumStateSorted);
         });
 
@@ -228,6 +230,34 @@ public class ListUserFriendBirthdaysView extends JFrame {
             }
             dispose();
             new HomeView();
+        });
+
+        copyButton.addActionListener(e -> {
+            if (table.getSelectedRow() == -1) return;
+
+            objectRowUserFriendBirthday = dataUserFriendsBirthdayOnTable[table.getSelectedRow()];
+        });
+
+        panelScrollTable.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK), "ctrlV");
+        panelScrollTable.getActionMap().put("ctrlV", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (objectRowUserFriendBirthday != null) {
+                    LocalDate oldVersionDate = LocalDate.parse(objectRowUserFriendBirthday[2].toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.getDefault()));
+
+                    new CreateUserFriendBirthdayView(new UserFriendsData(
+                            new FriendBirthdayDate(oldVersionDate,
+                                    Integer.parseInt(objectRowUserFriendBirthday[3].toString()),
+                                    Integer.parseInt(objectRowUserFriendBirthday[4].toString()),
+                                    PeriodTimeEnum.valueOf(objectRowUserFriendBirthday[5].toString()),
+                                    Integer.parseInt(objectRowUserFriendBirthday[6].toString())
+                            ),
+                            new AboutFriend(objectRowUserFriendBirthday[1].toString()),
+                            user
+                    ));
+                    chooseSortedByEnum(enumStateSorted);
+                }
+            }
         });
 
         onOffBackgroundMusic.addActionListener(e -> {

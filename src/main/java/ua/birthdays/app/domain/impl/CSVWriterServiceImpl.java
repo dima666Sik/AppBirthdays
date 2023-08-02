@@ -4,6 +4,7 @@ import com.opencsv.CSVWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.birthdays.app.domain.exceptions.DomainException;
+import ua.birthdays.app.domain.interfaces.AuthService;
 import ua.birthdays.app.domain.interfaces.FileWriterService;
 import ua.birthdays.app.domain.util.Randomize;
 import ua.birthdays.app.models.UserFriendsData;
@@ -13,6 +14,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+
+/**
+ * Implementation of the {@link FileWriterService} interface that writes user friend birthday data into a CSV file.
+ */
 public class CSVWriterServiceImpl implements FileWriterService {
     private final static Logger logger = LogManager.getLogger(CSVWriterServiceImpl.class.getName());
 

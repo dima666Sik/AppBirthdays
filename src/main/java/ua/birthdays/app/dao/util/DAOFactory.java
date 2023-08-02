@@ -9,6 +9,10 @@ import ua.birthdays.app.dao.mysql.impl.FriendBirthdayDateDAOMySQLImpl;
 import ua.birthdays.app.dao.mysql.impl.UserDAOMySQLImpl;
 import ua.birthdays.app.dao.mysql.impl.UserFriendsDataDAOMySQLImpl;
 
+/**
+ * Factory for creating data access objects (DAO).
+ * Used to obtain instances of DAO implementations for specific objects.
+ */
 public class DAOFactory {
     public static UserDAO getUserAuthDao() {
         return new UserDAOMySQLImpl();

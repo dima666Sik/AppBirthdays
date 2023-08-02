@@ -14,6 +14,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Date;
 
 public class CreateUserFriendBirthdayView extends JDialog {
     private JPanel panelCreateUserFriendBirthday;
@@ -45,6 +46,36 @@ public class CreateUserFriendBirthdayView extends JDialog {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         setVisible(true);
+    }
+
+    public CreateUserFriendBirthdayView(UserFriendsData userFriendsData) {
+        setContentPane(panelCreateUserFriendBirthday);
+
+        setMinimumSize(new Dimension(580, 500));
+
+        jDateChooser.setDateFormatString("yyyy-MM-dd");
+        jPicker.add(jDateChooser);
+
+        initFieldsForm(userFriendsData);
+
+        confirmButton.addActionListener(e -> createUserFriendBirthday(userFriendsData.getUser()));
+
+        cancelButton.addActionListener(e -> dispose());
+
+        setModal(true);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        setVisible(true);
+    }
+
+    private void initFieldsForm(UserFriendsData userFriendsData) {
+        textFieldFriendName.setText(userFriendsData.getAboutFriend().getNameFriend());
+        textFieldRemindingHour.setText(String.valueOf(userFriendsData.getFriendBirthdayDate().getRemindedFriendHour()));
+        textFieldRemindingMinutes.setText(String.valueOf(userFriendsData.getFriendBirthdayDate().getRemindedFriendMinutes()));
+        textFieldRemindingCountDaysBeforeBirthday.setText(String.valueOf(userFriendsData.getFriendBirthdayDate().getRemindedCountDaysBeforeBirthday()));
+        comboBoxPeriodTime.setSelectedItem(userFriendsData.getFriendBirthdayDate().getPeriodTimeEnum().name());
+        jDateChooser.setDate(Date.from(userFriendsData.getFriendBirthdayDate().getFriendDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
     }
 
     private void createUserFriendBirthday(User user) {
