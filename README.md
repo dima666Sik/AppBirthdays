@@ -1,6 +1,6 @@
 # App Birthdays
 
-# Project #1 - Use JDBC API, MySQL Driver, Swing, JDK 11.
+## Project #1 - Use JDBC API, MySQL Driver, Swing, JDK 11.
 If u wanna get acquainted with this project, 
 please download needed branch with project of download all project and
 execute this command into console for go to branch:
