@@ -145,9 +145,9 @@ Main functions of the program will be showed below.👇
   ![Add](src/main/resources/imgs_for_readme/add.png)
 - Edit info about human into table
   ![Edit](src/main/resources/imgs_for_readme/edit.png)
-- Download files with info about people birthday
+- Download files with info about people birthday<br>
   ![Download files](src/main/resources/imgs_for_readme/download_files.png)
-  - CSV file:
+  - CSV file:<br>
   ![CSV file](src/main/resources/imgs_for_readme/CSV.png)
-  - PDF file:
+  - PDF file:<br>
   ![PDF file](src/main/resources/imgs_for_readme/PDF.png)
