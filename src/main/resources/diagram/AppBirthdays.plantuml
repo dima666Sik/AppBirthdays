@@ -1,0 +1,88 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class AboutFriend
+interface AboutFriendDAO << interface >>
+class AboutFriendDAOMySQLImpl
+class AbstractLayout
+interface Audio << interface >>
+interface AuthService << interface >>
+class AuthServiceImpl
+class AuthorizationView
+class CSVWriterServiceImpl
+class CreateUserFriendBirthdayView
+class DAOException
+class DAOFactory
+class DBConnector
+class DimensionInfo
+class DomainException
+class EditUserFriendBirthdayView
+class Encryption
+enum EnumDBNameTables << enumeration >>
+enum EnumStateSorted << enumeration >>
+interface FileWriterService << interface >>
+class FriendBirthdayDate
+interface FriendBirthdayDateDAO << interface >>
+class FriendBirthdayDateDAOMySQLImpl
+class GridConstraints
+class GridLayoutManager
+class HomeView
+class HorizontalInfo
+class LayoutState
+class ListUserFriendBirthdaysView
+class MP3Player
+class Main
+interface MainFeaturesService << interface >>
+class MainFeaturesServiceImpl
+class MainFeaturesServiceImplTest
+class PDFWriterServiceImpl
+enum PeriodTimeEnum << enumeration >>
+class PropertiesFile
+class QueryAboutFriend
+class QueryFriendBirthdayDate
+class QueryUser
+class QueryUserFriendsData
+class Randomize
+class ReadIdMySQL
+class RegistrationView
+class Spacer
+class SupportCode
+class User
+interface UserDAO << interface >>
+class UserDAOMySQLImpl
+class UserFriendsData
+interface UserFriendsDataDAO << interface >>
+class UserFriendsDataDAOMySQLImpl
+class Util
+class UtilDAO
+class UtilForm
+class VerticalInfo
+
+AboutFriendDAOMySQLImpl         -[#008200,dashed]-^  AboutFriendDAO                 
+AuthServiceImpl                 -[#008200,dashed]-^  AuthService                    
+AuthServiceImpl                "1" *-[#595959,plain]-> "userDAO\n1" UserDAO                        
+CSVWriterServiceImpl            -[#008200,dashed]-^  FileWriterService              
+FriendBirthdayDate             "1" *-[#595959,plain]-> "periodTimeEnum\n1" PeriodTimeEnum                 
+FriendBirthdayDateDAOMySQLImpl  -[#008200,dashed]-^  FriendBirthdayDateDAO          
+ListUserFriendBirthdaysView    "1" *-[#595959,plain]-> "audioCongratulationsMP3\n1" Audio                          
+ListUserFriendBirthdaysView    "1" *-[#595959,plain]-> "enumStateSorted\n1" EnumStateSorted                
+ListUserFriendBirthdaysView    "1" *-[#595959,plain]-> "mainFeaturesService\n1" MainFeaturesService            
+ListUserFriendBirthdaysView    "1" *-[#595959,plain]-> "user\n1" User                           
+ListUserFriendBirthdaysView    "1" *-[#595959,plain]-> "userFriendsDataList\n*" UserFriendsData                
+MP3Player                       -[#008200,dashed]-^  Audio                          
+MainFeaturesServiceImpl        "1" *-[#595959,plain]-> "aboutFriendDAO\n1" AboutFriendDAO                 
+MainFeaturesServiceImpl        "1" *-[#595959,plain]-> "friendBirthdayDateDAO\n1" FriendBirthdayDateDAO          
+MainFeaturesServiceImpl         -[#008200,dashed]-^  MainFeaturesService            
+MainFeaturesServiceImpl        "1" *-[#595959,plain]-> "userFriendsDataDAO\n1" UserFriendsDataDAO             
+MainFeaturesServiceImplTest    "1" *-[#595959,plain]-> "mainFeaturesService\n1" MainFeaturesService            
+PDFWriterServiceImpl            -[#008200,dashed]-^  FileWriterService              
+UserDAOMySQLImpl                -[#008200,dashed]-^  UserDAO                        
+UserFriendsData                "1" *-[#595959,plain]-> "aboutFriend\n1" AboutFriend                    
+UserFriendsData                "1" *-[#595959,plain]-> "friendBirthdayDate\n1" FriendBirthdayDate             
+UserFriendsData                "1" *-[#595959,plain]-> "user\n1" User                           
+UserFriendsDataDAOMySQLImpl    "1" *-[#595959,plain]-> "userFriendsDataList\n*" UserFriendsData                
+UserFriendsDataDAOMySQLImpl     -[#008200,dashed]-^  UserFriendsDataDAO             
+@enduml

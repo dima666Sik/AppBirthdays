@@ -1,5 +1,4 @@
 .idea
-src/main/resources/diagram
 src/main/resources/db.properties
 src/main/java/ua/birthdays/app/dao/env/EnumDBNameTables.java
 target/
