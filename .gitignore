@@ -1,6 +1,5 @@
 .idea
 src/
 target/
-logger.log
 pom.xml
 .gitignore
