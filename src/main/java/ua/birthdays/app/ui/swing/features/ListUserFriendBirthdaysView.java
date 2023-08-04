@@ -63,9 +63,9 @@ public class ListUserFriendBirthdaysView extends JFrame {
         setContentPane(panelListFriendBirthdays);
         labelCurrentUser.setText(user.getFirstName().concat(","));
         labelCurrentUserEmail.setText(user.getEmail());
-//        startRemainingService();
+        startRemainingService();
         createTable();
-        setMinimumSize(new Dimension(1080, 600));
+        setMinimumSize(new Dimension(1080, 700));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
