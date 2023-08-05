@@ -1,4 +1,4 @@
-# App Birthdays
+# App Birthdays 🎂 🍰 🎈 🎉 🎁
 
 ## Preview, I hope you enjoy it 😊
 Welcome to App Birthdays, a project designed to manage and organize birthday information with a user-friendly interface.
