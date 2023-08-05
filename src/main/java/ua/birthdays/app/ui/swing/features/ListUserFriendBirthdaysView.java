@@ -137,7 +137,7 @@ public class ListUserFriendBirthdaysView extends JFrame {
 
                 audioCongratulationsMP3.stop();
 
-            }, finalInitialDelay, TimeUnit.MILLISECONDS);
+            }, finalInitialDelay, TimeUnit.MILLISECONDS); // change MILLISECONDS on MINUTES! (Now stay in test version)
         }
 
         scheduler.shutdown();
