@@ -1,0 +1,17 @@
+ua.birthdays.app.dao.env
+ua.birthdays.app.dao.exceptions
+ua.birthdays.app.dao.interfaces
+ua.birthdays.app.dao.mysql.impl
+ua.birthdays.app.dao.query
+ua.birthdays.app.dao.util
+ua.birthdays.app.domain.exceptions
+ua.birthdays.app.domain.impl
+ua.birthdays.app.domain.interfaces
+ua.birthdays.app.domain.util
+ua.birthdays.app.main
+ua.birthdays.app.models
+ua.birthdays.app.models.audio
+ua.birthdays.app.ui.swing.auth
+ua.birthdays.app.ui.swing.features
+ua.birthdays.app.ui.swing.menuview
+ua.birthdays.app.ui.swing.util

@@ -59,7 +59,7 @@ public class ListUserFriendBirthdaysView extends JFrame {
 
     public ListUserFriendBirthdaysView(User user) {
         this.user = user;
-        setUndecorated(true);
+//        setUndecorated(true);
         setContentPane(panelListFriendBirthdays);
         labelCurrentUser.setText(user.getFirstName().concat(","));
         labelCurrentUserEmail.setText(user.getEmail());

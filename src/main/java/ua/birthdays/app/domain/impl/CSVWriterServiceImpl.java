@@ -13,7 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-
 /**
  * Implementation of the {@link FileWriterService} interface that writes user friend birthday data into a CSV file.
  */
