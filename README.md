@@ -109,6 +109,8 @@ app.birthdays.data.db.name=namedb
    - You can change setting to your logging into `log4j2.properties`.
    - First, you will need to register as a new user.
 
+5. If you want to see documentation, please check javadoc in resources this app. 
+
 ## Database
 
 - You need to create database and add this name db to `db.properties`, and this all that u must to do in order to start to using this project.
