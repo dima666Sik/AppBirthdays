@@ -7,21 +7,20 @@ import ua.birthdays.app.dao.query.QueryUser;
 import ua.birthdays.app.dao.query.QueryUserFriendsData;
 import ua.birthdays.app.dao.util.DBConnector;
 
-import java.io.FileReader;
 import java.sql.*;
 
 public class ReadIdMySQL {
 
-    final static Logger logger = LogManager.getLogger(FileReader.class);
+    final static Logger logger = LogManager.getLogger(ReadIdMySQL.class);
 
-    public static long readIdUser(String email, String password) {
+    public static long readIdUser(final String email, final String password) {
         long id = 0;
         try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(QueryUser.findUserByEmailAndPassword());
+             PreparedStatement statement = connection.prepareStatement(QueryUser.findUserByEmailAndPassword())
         ) {
             statement.setString(1, email);
             statement.setString(2, password);
-            try (ResultSet resultSet = statement.executeQuery();) {
+            try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     id = resultSet.getInt("id_user");
                 }

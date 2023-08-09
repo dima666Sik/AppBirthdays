@@ -2,7 +2,6 @@ package ua.birthdays.app.dao.mysql.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.birthdays.app.dao.env.EnumDBNameTables;
 import ua.birthdays.app.dao.exceptions.DAOException;
 import ua.birthdays.app.dao.interfaces.AboutFriendDAO;
 import ua.birthdays.app.dao.query.QueryAboutFriend;
@@ -16,17 +15,8 @@ public class AboutFriendDAOMySQLImpl implements AboutFriendDAO {
     private final static Logger logger = LogManager.getLogger(AboutFriendDAOMySQLImpl.class.getName());
 
     @Override
-    public long createAboutFriend(AboutFriend aboutFriend) throws DAOException {
-        if (!UtilDAO.isTableExists(EnumDBNameTables.ABOUT_FRIEND_TABLE.getEnumDBEnvironment())) {
-            try (Connection connection = DBConnector.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(QueryAboutFriend.createTableAboutFriend())
-            ) {
-                statement.executeUpdate();
-                logger.info("Create table \"about_friend\" was successful!");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+    public long createAboutFriend(final AboutFriend aboutFriend) throws DAOException {
+        UtilDAO.isTableAboutFriendExist();
 
         try (Connection connection = DBConnector.getConnection();
 

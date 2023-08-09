@@ -2,7 +2,6 @@ package ua.birthdays.app.dao.mysql.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.birthdays.app.dao.env.EnumDBNameTables;
 import ua.birthdays.app.dao.exceptions.DAOException;
 import ua.birthdays.app.dao.interfaces.FriendBirthdayDateDAO;
 import ua.birthdays.app.dao.query.QueryFriendBirthdayDate;
@@ -16,17 +15,8 @@ public class FriendBirthdayDateDAOMySQLImpl implements FriendBirthdayDateDAO {
     private final static Logger logger = LogManager.getLogger(FriendBirthdayDateDAOMySQLImpl.class.getName());
 
     @Override
-    public long createFriendBirthdayDate(FriendBirthdayDate friendBirthdayDate) throws DAOException {
-        if (!UtilDAO.isTableExists(EnumDBNameTables.FRIEND_BIRTHDAY_DATE_TABLE.getEnumDBEnvironment())) {
-            try (Connection connection = DBConnector.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(QueryFriendBirthdayDate.createTableFriendBirthdayDate())
-            ) {
-                statement.executeUpdate();
-                logger.info("Create table \"friend_birthday_date\" was successful!");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+    public long createFriendBirthdayDate(final FriendBirthdayDate friendBirthdayDate) throws DAOException {
+        UtilDAO.isTableFriendBirthdayDateExist();
 
         try (Connection connection = DBConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(QueryFriendBirthdayDate.createFriendBirthdayDate(), Statement.RETURN_GENERATED_KEYS)) {

@@ -6,5 +6,5 @@ import ua.birthdays.app.models.UserFriendsData;
 import java.util.List;
 
 public interface FileWriterService {
-    void writeDataIntoFile(String patch, List<UserFriendsData> userFriendsDataList) throws DomainException;
+    void writeDataIntoFile(final String patch, final List<UserFriendsData> userFriendsDataList) throws DomainException;
 }

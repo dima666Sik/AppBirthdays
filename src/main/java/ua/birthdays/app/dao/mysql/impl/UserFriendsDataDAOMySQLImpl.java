@@ -2,12 +2,9 @@ package ua.birthdays.app.dao.mysql.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.birthdays.app.dao.env.EnumDBNameTables;
 import ua.birthdays.app.dao.env.PeriodTimeEnum;
 import ua.birthdays.app.dao.exceptions.DAOException;
 import ua.birthdays.app.dao.interfaces.UserFriendsDataDAO;
-import ua.birthdays.app.dao.query.QueryAboutFriend;
-import ua.birthdays.app.dao.query.QueryFriendBirthdayDate;
 import ua.birthdays.app.dao.query.QueryUserFriendsData;
 import ua.birthdays.app.dao.util.DBConnector;
 import ua.birthdays.app.dao.util.UtilDAO;
@@ -25,19 +22,10 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
     private List<UserFriendsData> userFriendsDataList;
 
     @Override
-    public boolean createUserFriendsData(UserFriendsData userFriendsData, long idAboutFriendRow, long idFriendBirthdayDateRow) throws DAOException {
+    public boolean createUserFriendsData(final UserFriendsData userFriendsData, final long idAboutFriendRow, final long idFriendBirthdayDateRow) throws DAOException {
         long idUser = ReadIdMySQL.readIdUser(userFriendsData.getUser().getEmail(), userFriendsData.getUser().getPassword());
 
-        if (!UtilDAO.isTableExists(EnumDBNameTables.USER_FRIENDS_DATA_TABLE.getEnumDBEnvironment())) {
-            try (Connection connection = DBConnector.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.createTableUserFriendsData())
-            ) {
-                statement.executeUpdate();
-                logger.info("Create table \"user_friends_data\" was successful!");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        UtilDAO.isTableUserFriendDataExist();
 
         if (UtilDAO.isUserFriendsDataRowExists(idUser, userFriendsData.getAboutFriend().getNameFriend(), userFriendsData.getFriendBirthdayDate().getFriendDate())) {
             logger.warn("You have the same info into table about ufd!");
@@ -59,63 +47,18 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
     }
 
     @Override
-    public List<UserFriendsData> readAllUserFriendsDataDefault(User user) throws DAOException {
+    public List<UserFriendsData> readAllUserFriendsDataDefault(final User user) throws DAOException {
         userFriendsDataList = new ArrayList<>();
 
-        if (!UtilDAO.isTableExists(EnumDBNameTables.ABOUT_FRIEND_TABLE.getEnumDBEnvironment())) {
-            try (Connection connection = DBConnector.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(QueryAboutFriend.createTableAboutFriend())
-            ) {
-                statement.executeUpdate();
-                logger.info("Create table \"about_friend\" was successful!");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        UtilDAO.isTableAboutFriendExist();
 
-        if (!UtilDAO.isTableExists(EnumDBNameTables.FRIEND_BIRTHDAY_DATE_TABLE.getEnumDBEnvironment())) {
-            try (Connection connection = DBConnector.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(QueryFriendBirthdayDate.createTableFriendBirthdayDate())
-            ) {
-                statement.executeUpdate();
-                logger.info("Create table \"friend_birthday_date\" was successful!");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        UtilDAO.isTableFriendBirthdayDateExist();
 
-        if (!UtilDAO.isTableExists(EnumDBNameTables.USER_FRIENDS_DATA_TABLE.getEnumDBEnvironment())) {
-            try (Connection connection = DBConnector.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.createTableUserFriendsData())
-            ) {
-                statement.executeUpdate();
-                logger.info("Create table \"user_friends_data\" was successful!");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        UtilDAO.isTableUserFriendDataExist();
 
         try (Connection connection = DBConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.findUserFriendsDataByUserId())) {
-            statement.setLong(1, ReadIdMySQL.readIdUser(user.getEmail(), user.getPassword()));
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    userFriendsDataList.add(
-                            new UserFriendsData(
-                                    new FriendBirthdayDate(
-                                            resultSet.getDate("friend_date").toLocalDate(),
-                                            resultSet.getInt("reminded_friend_hour"),
-                                            resultSet.getInt("reminded_friend_minutes"),
-                                            PeriodTimeEnum.valueOf(resultSet.getString("reminded_period_time_enum")),
-                                            resultSet.getInt("reminded_count_days_before_birthday")
-                                    ),
-                                    new AboutFriend(resultSet.getString("name_friend")),
-                                    user
-                            )
-                    );
-                }
-                logger.info("Read ALL User Friends Data was successful!");
-            }
+            readByIdUserUserFriendData(user, statement);
         } catch (SQLException e) {
             logger.error("Cannot Read ALL User Friends Data!", e);
             throw new DAOException("Cannot Read ALL User Friends Data!", e);
@@ -124,30 +67,12 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
     }
 
     @Override
-    public List<UserFriendsData> readAllUserFriendsDataDescendingByFriendBirthdayDate(User user) throws DAOException {
+    public List<UserFriendsData> readAllUserFriendsDataDescendingByFriendBirthdayDate(final User user) throws DAOException {
         userFriendsDataList = new ArrayList<>();
 
         try (Connection connection = DBConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.findUserFriendsDataByUserIdDescendingFriendBirthdayDate())) {
-            statement.setLong(1, ReadIdMySQL.readIdUser(user.getEmail(), user.getPassword()));
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    userFriendsDataList.add(
-                            new UserFriendsData(
-                                    new FriendBirthdayDate(
-                                            resultSet.getDate("friend_date").toLocalDate(),
-                                            resultSet.getInt("reminded_friend_hour"),
-                                            resultSet.getInt("reminded_friend_minutes"),
-                                            PeriodTimeEnum.valueOf(resultSet.getString("reminded_period_time_enum")),
-                                            resultSet.getInt("reminded_count_days_before_birthday")
-                                    ),
-                                    new AboutFriend(resultSet.getString("name_friend")),
-                                    user
-                            )
-                    );
-                }
-                logger.info("Read ALL User Friends Data was successful!");
-            }
+            readByIdUserUserFriendData(user, statement);
         } catch (SQLException e) {
             logger.error("Cannot Read ALL User Friends Data!", e);
             throw new DAOException("Cannot Read ALL User Friends Data!", e);
@@ -156,30 +81,12 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
     }
 
     @Override
-    public List<UserFriendsData> readAllUserFriendsDataAscendingByFriendBirthdayDate(User user) throws DAOException {
+    public List<UserFriendsData> readAllUserFriendsDataAscendingByFriendBirthdayDate(final User user) throws DAOException {
         userFriendsDataList = new ArrayList<>();
 
         try (Connection connection = DBConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.findUserFriendsDataByUserIdAscendingFriendBirthdayDate())) {
-            statement.setLong(1, ReadIdMySQL.readIdUser(user.getEmail(), user.getPassword()));
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    userFriendsDataList.add(
-                            new UserFriendsData(
-                                    new FriendBirthdayDate(
-                                            resultSet.getDate("friend_date").toLocalDate(),
-                                            resultSet.getInt("reminded_friend_hour"),
-                                            resultSet.getInt("reminded_friend_minutes"),
-                                            PeriodTimeEnum.valueOf(resultSet.getString("reminded_period_time_enum")),
-                                            resultSet.getInt("reminded_count_days_before_birthday")
-                                    ),
-                                    new AboutFriend(resultSet.getString("name_friend")),
-                                    user
-                            )
-                    );
-                }
-                logger.info("Read ALL User Friends Data was successful!");
-            }
+            readByIdUserUserFriendData(user, statement);
         } catch (SQLException e) {
             logger.error("Cannot Read ALL User Friends Data!", e);
             throw new DAOException("Cannot Read ALL User Friends Data!", e);
@@ -188,30 +95,12 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
     }
 
     @Override
-    public List<UserFriendsData> readAllUserFriendsDataDescendingByNameFriend(User user) throws DAOException {
+    public List<UserFriendsData> readAllUserFriendsDataDescendingByNameFriend(final User user) throws DAOException {
         userFriendsDataList = new ArrayList<>();
 
         try (Connection connection = DBConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.findUserFriendsDataByUserIdDescendingNameFriend())) {
-            statement.setLong(1, ReadIdMySQL.readIdUser(user.getEmail(), user.getPassword()));
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    userFriendsDataList.add(
-                            new UserFriendsData(
-                                    new FriendBirthdayDate(
-                                            resultSet.getDate("friend_date").toLocalDate(),
-                                            resultSet.getInt("reminded_friend_hour"),
-                                            resultSet.getInt("reminded_friend_minutes"),
-                                            PeriodTimeEnum.valueOf(resultSet.getString("reminded_period_time_enum")),
-                                            resultSet.getInt("reminded_count_days_before_birthday")
-                                    ),
-                                    new AboutFriend(resultSet.getString("name_friend")),
-                                    user
-                            )
-                    );
-                }
-                logger.info("Read ALL User Friends Data was successful!");
-            }
+            readByIdUserUserFriendData(user, statement);
         } catch (SQLException e) {
             logger.error("Cannot Read ALL User Friends Data!", e);
             throw new DAOException("Cannot Read ALL User Friends Data!", e);
@@ -219,31 +108,35 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
         return userFriendsDataList;
     }
 
+    private void readByIdUserUserFriendData(User user, PreparedStatement statement) throws SQLException {
+        statement.setLong(1, ReadIdMySQL.readIdUser(user.getEmail(), user.getPassword()));
+        try (ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                userFriendsDataList.add(
+                        new UserFriendsData(
+                                new FriendBirthdayDate(
+                                        resultSet.getDate("friend_date").toLocalDate(),
+                                        resultSet.getInt("reminded_friend_hour"),
+                                        resultSet.getInt("reminded_friend_minutes"),
+                                        PeriodTimeEnum.valueOf(resultSet.getString("reminded_period_time_enum")),
+                                        resultSet.getInt("reminded_count_days_before_birthday")
+                                ),
+                                new AboutFriend(resultSet.getString("name_friend")),
+                                user
+                        )
+                );
+            }
+            logger.info("Read ALL User Friends Data was successful!");
+        }
+    }
+
     @Override
-    public List<UserFriendsData> readAllUserFriendsDataAscendingByNameFriend(User user) throws DAOException {
+    public List<UserFriendsData> readAllUserFriendsDataAscendingByNameFriend(final User user) throws DAOException {
         userFriendsDataList = new ArrayList<>();
 
         try (Connection connection = DBConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.findUserFriendsDataByUserIdAscendingNameFriend())) {
-            statement.setLong(1, ReadIdMySQL.readIdUser(user.getEmail(), user.getPassword()));
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    userFriendsDataList.add(
-                            new UserFriendsData(
-                                    new FriendBirthdayDate(
-                                            resultSet.getDate("friend_date").toLocalDate(),
-                                            resultSet.getInt("reminded_friend_hour"),
-                                            resultSet.getInt("reminded_friend_minutes"),
-                                            PeriodTimeEnum.valueOf(resultSet.getString("reminded_period_time_enum")),
-                                            resultSet.getInt("reminded_count_days_before_birthday")
-                                    ),
-                                    new AboutFriend(resultSet.getString("name_friend")),
-                                    user
-                            )
-                    );
-                }
-                logger.info("Read ALL User Friends Data was successful!");
-            }
+            readByIdUserUserFriendData(user, statement);
         } catch (SQLException e) {
             logger.error("Cannot Read ALL User Friends Data!", e);
             throw new DAOException("Cannot Read ALL User Friends Data!", e);
@@ -252,7 +145,7 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
     }
 
     @Override
-    public boolean updateUserFriendsData(UserFriendsData oldUserFriendsData, UserFriendsData newUserFriendsData) throws DAOException {
+    public boolean updateUserFriendsData(final UserFriendsData oldUserFriendsData, final UserFriendsData newUserFriendsData) throws DAOException {
         long idUser = ReadIdMySQL.readIdUser(newUserFriendsData.getUser().getEmail(), newUserFriendsData.getUser().getPassword());
 
         if (UtilDAO.isUserFriendsDataRowExists(idUser, newUserFriendsData.getAboutFriend().getNameFriend(), newUserFriendsData.getFriendBirthdayDate().getFriendDate())) {
@@ -279,7 +172,7 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
     }
 
     @Override
-    public boolean deleteUserFriendsData(UserFriendsData userFriendsData) throws DAOException {
+    public boolean deleteUserFriendsData(final UserFriendsData userFriendsData) throws DAOException {
         long idUser = ReadIdMySQL.readIdUser(userFriendsData.getUser().getEmail(), userFriendsData.getUser().getPassword());
 
         try (Connection connection = DBConnector.getConnection();

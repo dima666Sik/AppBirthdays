@@ -1,9 +1,11 @@
 package ua.birthdays.app.dao.util;
 
+import ua.birthdays.app.dao.env.EnumDBNameTables;
 import ua.birthdays.app.dao.exceptions.DAOException;
-import ua.birthdays.app.dao.mysql.impl.UserDAOMySQLImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.birthdays.app.dao.query.QueryAboutFriend;
+import ua.birthdays.app.dao.query.QueryFriendBirthdayDate;
 import ua.birthdays.app.dao.query.QueryUserFriendsData;
 
 import java.sql.*;
@@ -13,7 +15,7 @@ import java.time.LocalDate;
  * Utility class for working with the database.
  */
 public class UtilDAO {
-    private final static Logger logger = LogManager.getLogger(UserDAOMySQLImpl.class.getName());
+    private final static Logger logger = LogManager.getLogger(UtilDAO.class.getName());
 
     private final static String FILE_PROP_DB_NAME = "db.properties";
 
@@ -60,6 +62,48 @@ public class UtilDAO {
         } catch (SQLException e) {
             logger.error("Cannot check ufd row exists!", e);
             throw new DAOException("Cannot check ufd row exists!", e);
+        }
+    }
+
+    public static void isTableUserFriendDataExist() throws DAOException {
+        if (!UtilDAO.isTableExists(EnumDBNameTables.USER_FRIENDS_DATA_TABLE.getEnumDBEnvironment())) {
+            try (Connection connection = DBConnector.getConnection();
+                 PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.createTableUserFriendsData())
+            ) {
+                statement.executeUpdate();
+                logger.info("Create table \"user_friends_data\" was successful!");
+            } catch (SQLException e) {
+                logger.info("Error table \"user_friends_data\" create!", e);
+                throw new DAOException("Error table \"user_friends_data\" create!", e);
+            }
+        }
+    }
+
+    public static void isTableFriendBirthdayDateExist() throws DAOException {
+        if (!UtilDAO.isTableExists(EnumDBNameTables.FRIEND_BIRTHDAY_DATE_TABLE.getEnumDBEnvironment())) {
+            try (Connection connection = DBConnector.getConnection();
+                 PreparedStatement statement = connection.prepareStatement(QueryFriendBirthdayDate.createTableFriendBirthdayDate())
+            ) {
+                statement.executeUpdate();
+                logger.info("Create table \"friend_birthday_date\" was successful!");
+            } catch (SQLException e) {
+                logger.info("Error table \"friend_birthday_date\" create!", e);
+                throw new DAOException("Error table \"friend_birthday_date\" create!", e);
+            }
+        }
+    }
+
+    public static void isTableAboutFriendExist() throws DAOException {
+        if (!UtilDAO.isTableExists(EnumDBNameTables.ABOUT_FRIEND_TABLE.getEnumDBEnvironment())) {
+            try (Connection connection = DBConnector.getConnection();
+                 PreparedStatement statement = connection.prepareStatement(QueryAboutFriend.createTableAboutFriend())
+            ) {
+                statement.executeUpdate();
+                logger.info("Create table \"about_friend\" was successful!");
+            } catch (SQLException e) {
+                logger.info("Error table \"about_friend\" create!", e);
+                throw new DAOException("Error table \"about_friend\" create!", e);
+            }
         }
     }
 }

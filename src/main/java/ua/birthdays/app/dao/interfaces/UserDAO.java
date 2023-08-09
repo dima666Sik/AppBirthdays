@@ -4,7 +4,7 @@ import ua.birthdays.app.dao.exceptions.DAOException;
 import ua.birthdays.app.models.User;
 
 public interface UserDAO {
-    boolean createUser(User user) throws DAOException;
+    boolean createUser(final User user) throws DAOException;
 
-    User findUserByEmailAndPassword(String email, String password) throws DAOException;
+    User findUserByEmailAndPassword(final String email, final String password) throws DAOException;
 }

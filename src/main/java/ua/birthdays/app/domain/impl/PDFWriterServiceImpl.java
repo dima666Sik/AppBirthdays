@@ -9,6 +9,8 @@ import com.itextpdf.layout.border.Border;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.birthdays.app.domain.exceptions.DomainException;
 import ua.birthdays.app.domain.interfaces.FileWriterService;
 import ua.birthdays.app.domain.util.Randomize;
@@ -21,8 +23,9 @@ import java.util.List;
  * Implementation of the {@link FileWriterService} interface that writes user friend birthday data into a PDF file.
  */
 public class PDFWriterServiceImpl implements FileWriterService {
+    private final static Logger logger = LogManager.getLogger(PDFWriterServiceImpl.class.getName());
     @Override
-    public void writeDataIntoFile(String patch, List<UserFriendsData> userFriendsDataList) throws DomainException {
+    public void writeDataIntoFile(final String patch, final List<UserFriendsData> userFriendsDataList) throws DomainException {
         String nameCSVFile = "\\yourFriendsBirthdays" + Randomize.generateRandomize(0, 100000) + ".pdf";
 
         try {
@@ -51,9 +54,9 @@ public class PDFWriterServiceImpl implements FileWriterService {
 
             document.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.info("Error find file .pdf!", e);
+            throw new DomainException("Error find file .pdf!", e);
         }
-
 
     }
 }

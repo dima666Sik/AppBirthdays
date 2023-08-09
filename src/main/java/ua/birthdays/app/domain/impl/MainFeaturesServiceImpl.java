@@ -7,7 +7,6 @@ import ua.birthdays.app.dao.interfaces.AboutFriendDAO;
 import ua.birthdays.app.dao.interfaces.FriendBirthdayDateDAO;
 import ua.birthdays.app.dao.interfaces.UserFriendsDataDAO;
 import ua.birthdays.app.dao.util.DAOFactory;
-import ua.birthdays.app.domain.interfaces.FileWriterService;
 import ua.birthdays.app.domain.interfaces.MainFeaturesService;
 import ua.birthdays.app.models.AboutFriend;
 import ua.birthdays.app.models.FriendBirthdayDate;
@@ -40,7 +39,7 @@ public class MainFeaturesServiceImpl implements MainFeaturesService {
      * @return True if the creation was successful, otherwise false.
      */
     @Override
-    public boolean createUserFriendsData(UserFriendsData userFriendsData) {
+    public boolean createUserFriendsData(final UserFriendsData userFriendsData) {
         try {
             long idAboutFriendRow, idFriendBirthdayDateRow;
             if ((idAboutFriendRow = aboutFriendDAO.createAboutFriend(userFriendsData.getAboutFriend())) == -1)
@@ -61,7 +60,7 @@ public class MainFeaturesServiceImpl implements MainFeaturesService {
      * @return True if the creation was successful, otherwise false.
      */
     @Override
-    public boolean createFriendBirthdayDate(FriendBirthdayDate friendBirthdayDate) {
+    public boolean createFriendBirthdayDate(final FriendBirthdayDate friendBirthdayDate) {
         try {
             return friendBirthdayDateDAO.createFriendBirthdayDate(friendBirthdayDate) != -1;
         } catch (DAOException e) {
@@ -77,7 +76,7 @@ public class MainFeaturesServiceImpl implements MainFeaturesService {
      * @return True if the creation was successful, otherwise false.
      */
     @Override
-    public boolean createAboutFriend(AboutFriend aboutFriend) {
+    public boolean createAboutFriend(final AboutFriend aboutFriend) {
         try {
             return aboutFriendDAO.createAboutFriend(aboutFriend) != -1;
         } catch (DAOException e) {
@@ -87,7 +86,7 @@ public class MainFeaturesServiceImpl implements MainFeaturesService {
     }
 
     @Override
-    public List<UserFriendsData> readAllUserFriendsDataDescendingByFriendBirthdayDate(User user) {
+    public List<UserFriendsData> readAllUserFriendsDataDescendingByFriendBirthdayDate(final User user) {
         try {
             return userFriendsDataDAO.readAllUserFriendsDataDescendingByFriendBirthdayDate(user);
         } catch (DAOException e) {
@@ -97,7 +96,7 @@ public class MainFeaturesServiceImpl implements MainFeaturesService {
     }
 
     @Override
-    public List<UserFriendsData> readAllUserFriendsDataAscendingByFriendBirthdayDate(User user) {
+    public List<UserFriendsData> readAllUserFriendsDataAscendingByFriendBirthdayDate(final User user) {
         try {
             return userFriendsDataDAO.readAllUserFriendsDataAscendingByFriendBirthdayDate(user);
         } catch (DAOException e) {
@@ -107,7 +106,7 @@ public class MainFeaturesServiceImpl implements MainFeaturesService {
     }
 
     @Override
-    public List<UserFriendsData> readAllUserFriendsDataDescendingByNameFriend(User user) {
+    public List<UserFriendsData> readAllUserFriendsDataDescendingByNameFriend(final User user) {
         try {
             return userFriendsDataDAO.readAllUserFriendsDataDescendingByNameFriend(user);
         } catch (DAOException e) {
@@ -117,7 +116,7 @@ public class MainFeaturesServiceImpl implements MainFeaturesService {
     }
 
     @Override
-    public List<UserFriendsData> readAllUserFriendsDataAscendingByNameFriend(User user) {
+    public List<UserFriendsData> readAllUserFriendsDataAscendingByNameFriend(final User user) {
         try {
             return userFriendsDataDAO.readAllUserFriendsDataAscendingByNameFriend(user);
         } catch (DAOException e) {
@@ -127,7 +126,7 @@ public class MainFeaturesServiceImpl implements MainFeaturesService {
     }
 
     @Override
-    public List<UserFriendsData> readAllUserFriendsDataByDefault(User user) {
+    public List<UserFriendsData> readAllUserFriendsDataByDefault(final User user) {
         try {
             return userFriendsDataDAO.readAllUserFriendsDataDefault(user);
         } catch (DAOException e) {
@@ -138,7 +137,7 @@ public class MainFeaturesServiceImpl implements MainFeaturesService {
 
 
     @Override
-    public boolean updateUserFriendsData(UserFriendsData oldUserFriendsData, UserFriendsData newUserFriendsData) {
+    public boolean updateUserFriendsData(final UserFriendsData oldUserFriendsData, final UserFriendsData newUserFriendsData) {
         try {
             return userFriendsDataDAO.updateUserFriendsData(oldUserFriendsData, newUserFriendsData);
         } catch (DAOException e) {
@@ -154,7 +153,7 @@ public class MainFeaturesServiceImpl implements MainFeaturesService {
      * @return True if the deletion was successful, otherwise false.
      */
     @Override
-    public boolean deleteUserFriendsData(UserFriendsData userFriendsData) {
+    public boolean deleteUserFriendsData(final UserFriendsData userFriendsData) {
         try {
             return userFriendsDataDAO.deleteUserFriendsData(userFriendsData);
         } catch (DAOException e) {

@@ -3,8 +3,8 @@ package ua.birthdays.app.domain.interfaces;
 import ua.birthdays.app.models.User;
 
 public interface AuthService {
-    boolean registration(String firstName, String lastName, String email, char[] password);
+    boolean registration(final String firstName, final String lastName, final String email, final char[] password);
 
-    User authorization(String email, char[] password);
+    User authorization(final String email, final char[] password);
 
 }

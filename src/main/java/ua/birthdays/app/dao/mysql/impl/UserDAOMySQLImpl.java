@@ -22,7 +22,7 @@ public class UserDAOMySQLImpl implements UserDAO {
     private final static Logger logger = LogManager.getLogger(UserDAOMySQLImpl.class.getName());
 
     @Override
-    public boolean createUser(User user) throws DAOException {
+    public boolean createUser(final User user) throws DAOException {
 
         if (!UtilDAO.isTableExists(EnumDBNameTables.USER_TABLE.getEnumDBEnvironment())) {
             try (Connection connection = DBConnector.getConnection();
@@ -31,7 +31,8 @@ public class UserDAOMySQLImpl implements UserDAO {
                 statement.executeUpdate();
                 logger.info("Create table \"users\" was successful!");
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.info("Error table \"users\" create!", e);
+                throw new DAOException("Error table \"users\" create!", e);
             }
         }
 
@@ -69,11 +70,11 @@ public class UserDAOMySQLImpl implements UserDAO {
         User user = null;
 
         try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(QueryUser.findUserByEmailAndPassword());
+             PreparedStatement statement = connection.prepareStatement(QueryUser.findUserByEmailAndPassword())
         ) {
             statement.setString(1, email);
             statement.setString(2, password);
-            try (ResultSet resultSet = statement.executeQuery();
+            try (ResultSet resultSet = statement.executeQuery()
             ) {
                 while (resultSet.next()) {
                     String firstName = resultSet.getString("first_name");

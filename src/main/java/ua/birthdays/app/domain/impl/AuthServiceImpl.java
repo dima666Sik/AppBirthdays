@@ -32,7 +32,7 @@ public class AuthServiceImpl implements AuthService {
      * @return true if registration was successful, otherwise false
      */
     @Override
-    public boolean registration(String firstName, String lastName, String email, char[] password) {
+    public boolean registration(final String firstName, final String lastName, final String email, final char[] password) {
 
         try {
             User user = new User(firstName, lastName, email, Encryption.encryptionSHA256(password));
@@ -55,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
      * @return a user object if authentication succeeds, or null if the user is not found or authentication fails
      */
     @Override
-    public User authorization(String email, char[] password) {
+    public User authorization(final String email, final char[] password) {
         User user = null;
 
         try {
