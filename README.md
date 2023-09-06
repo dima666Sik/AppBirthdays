@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # App Birthdays
 
 ## Project #1 - Using `JDBC API`, `MySQL Driver`, `Swing`, `JDK 11`.
@@ -163,4 +162,4 @@ Main functions of the program will be showed below.👇
   ![CSV file](src/main/resources/imgs_for_readme/CSV.png)
   - PDF file:<br>
   ![PDF file](src/main/resources/imgs_for_readme/PDF.png)
->>>>>>> app-desktop-jdbc-swing-mysql-v1
+
