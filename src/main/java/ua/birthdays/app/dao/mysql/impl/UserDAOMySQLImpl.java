@@ -1,6 +1,6 @@
 package ua.birthdays.app.dao.mysql.impl;
 
-import ua.birthdays.app.dao.env.EnumDBNameTables;
+import ua.birthdays.app.dao.env.EnumDBNameTable;
 import ua.birthdays.app.dao.util.DBConnector;
 
 import ua.birthdays.app.dao.exceptions.DAOException;
@@ -24,7 +24,7 @@ public class UserDAOMySQLImpl implements UserDAO {
     @Override
     public boolean createUser(final User user) throws DAOException {
 
-        if (!UtilDAO.isTableExists(EnumDBNameTables.USER_TABLE.getEnumDBEnvironment())) {
+        if (!UtilDAO.isTableExists(EnumDBNameTable.USER_TABLE.getEnumDBEnvironment())) {
             try (Connection connection = DBConnector.getConnection();
                  PreparedStatement statement = connection.prepareStatement(QueryUser.createTableUser())
             ) {
@@ -60,11 +60,11 @@ public class UserDAOMySQLImpl implements UserDAO {
 
     @Override
     public User findUserByEmailAndPassword(String email, String password) throws DAOException {
-        if (!UtilDAO.isTableExists(EnumDBNameTables.USER_TABLE.getEnumDBEnvironment())) {
+        if (!UtilDAO.isTableExists(EnumDBNameTable.USER_TABLE.getEnumDBEnvironment())) {
             logger.info("Read user wasn't successful! Table \" " +
-                    EnumDBNameTables.USER_TABLE.getEnumDBEnvironment() + "\" not exists!");
+                    EnumDBNameTable.USER_TABLE.getEnumDBEnvironment() + "\" not exists!");
             throw new DAOException("Read user wasn't successful! Table \" " +
-                    EnumDBNameTables.USER_TABLE.getEnumDBEnvironment() + "\" not exists!");
+                    EnumDBNameTable.USER_TABLE.getEnumDBEnvironment() + "\" not exists!");
         }
 
         User user = null;

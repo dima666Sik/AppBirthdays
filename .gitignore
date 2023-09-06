@@ -1,5 +1,5 @@
 .idea
 src/main/resources/db.properties
-src/main/java/ua/birthdays/app/dao/env/EnumDBNameTables.java
+src/main/java/ua/birthdays/app/dao/env/EnumDBNameTable.java
 target/
 logger.log

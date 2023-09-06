@@ -1,6 +1,6 @@
 package ua.birthdays.app.dao.util;
 
-import ua.birthdays.app.dao.env.EnumDBNameTables;
+import ua.birthdays.app.dao.env.EnumDBNameTable;
 import ua.birthdays.app.dao.exceptions.DAOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -66,7 +66,7 @@ public class UtilDAO {
     }
 
     public static void isTableUserFriendDataExist() throws DAOException {
-        if (!UtilDAO.isTableExists(EnumDBNameTables.USER_FRIENDS_DATA_TABLE.getEnumDBEnvironment())) {
+        if (!UtilDAO.isTableExists(EnumDBNameTable.USER_FRIENDS_DATA_TABLE.getEnumDBEnvironment())) {
             try (Connection connection = DBConnector.getConnection();
                  PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.createTableUserFriendsData())
             ) {
@@ -80,7 +80,7 @@ public class UtilDAO {
     }
 
     public static void isTableFriendBirthdayDateExist() throws DAOException {
-        if (!UtilDAO.isTableExists(EnumDBNameTables.FRIEND_BIRTHDAY_DATE_TABLE.getEnumDBEnvironment())) {
+        if (!UtilDAO.isTableExists(EnumDBNameTable.FRIEND_BIRTHDAY_DATE_TABLE.getEnumDBEnvironment())) {
             try (Connection connection = DBConnector.getConnection();
                  PreparedStatement statement = connection.prepareStatement(QueryFriendBirthdayDate.createTableFriendBirthdayDate())
             ) {
@@ -94,7 +94,7 @@ public class UtilDAO {
     }
 
     public static void isTableAboutFriendExist() throws DAOException {
-        if (!UtilDAO.isTableExists(EnumDBNameTables.ABOUT_FRIEND_TABLE.getEnumDBEnvironment())) {
+        if (!UtilDAO.isTableExists(EnumDBNameTable.ABOUT_FRIEND_TABLE.getEnumDBEnvironment())) {
             try (Connection connection = DBConnector.getConnection();
                  PreparedStatement statement = connection.prepareStatement(QueryAboutFriend.createTableAboutFriend())
             ) {
