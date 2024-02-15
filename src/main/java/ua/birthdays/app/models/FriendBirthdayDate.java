@@ -7,7 +7,6 @@ import java.util.Objects;
 
 public class FriendBirthdayDate {
     private final LocalDate friendDate;
-
     private final int remindedFriendHour;
     private final int remindedFriendMinutes;
     private final PeriodTimeEnum periodTimeEnum;

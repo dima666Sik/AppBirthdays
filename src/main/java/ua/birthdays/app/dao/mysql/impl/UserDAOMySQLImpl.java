@@ -1,40 +1,40 @@
 package ua.birthdays.app.dao.mysql.impl;
 
-import ua.birthdays.app.dao.env.EnumDBNameTable;
-import ua.birthdays.app.dao.util.DBConnector;
-
-import ua.birthdays.app.dao.exceptions.DAOException;
-import ua.birthdays.app.dao.interfaces.UserDAO;
-
-import ua.birthdays.app.dao.query.QueryUser;
-import ua.birthdays.app.dao.util.UtilDAO;
-import ua.birthdays.app.models.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.birthdays.app.dao.UserDAO;
+import ua.birthdays.app.dao.env.EnumDBNameTable;
+import ua.birthdays.app.dao.exceptions.DataAddingException;
+import ua.birthdays.app.dao.exceptions.DataReadingException;
+import ua.birthdays.app.dao.query.QueryUser;
+import ua.birthdays.app.dao.util.DBConnector;
+import ua.birthdays.app.dao.util.UtilDAO;
+import ua.birthdays.app.models.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 
+/**
+ * This class is an implementation of the UserDAO interface.
+ * It uses MySQL as a database.
+ */
 public class UserDAOMySQLImpl implements UserDAO {
-    private final static Logger logger = LogManager.getLogger(UserDAOMySQLImpl.class.getName());
+    private static final Logger logger = LogManager.getLogger(UserDAOMySQLImpl.class.getName());
 
+    /**
+     * Creates a new user in the database.
+     *
+     * @param user the user to create
+     * @return true if the user was created, false if a user with the same email already exists
+     * @throws DataAddingException if there was an error creating the user
+     */
     @Override
-    public boolean createUser(final User user) throws DAOException {
-
-        if (!UtilDAO.isTableExists(EnumDBNameTable.USER_TABLE.getEnumDBEnvironment())) {
-            try (Connection connection = DBConnector.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(QueryUser.createTableUser())
-            ) {
-                statement.executeUpdate();
-                logger.info("Create table \"users\" was successful!");
-            } catch (SQLException e) {
-                logger.info("Error table \"users\" create!", e);
-                throw new DAOException("Error table \"users\" create!", e);
-            }
-        }
+    public boolean createUser(final User user) throws DataAddingException {
+        UtilDAO.isUserTableExists();
 
         if (userIsExist(user)) {
             logger.info("Such user is defined, please change login...");
@@ -42,7 +42,7 @@ public class UserDAOMySQLImpl implements UserDAO {
         }
 
         try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(QueryUser.createUser())
+             PreparedStatement statement = connection.prepareStatement(QueryUser.CREATE_USER)
         ) {
             statement.setString(1, user.getFirstName());
             statement.setString(2, user.getLastName());
@@ -52,25 +52,33 @@ public class UserDAOMySQLImpl implements UserDAO {
             logger.info("Create user was successful!");
         } catch (SQLException e) {
             logger.error("Cannot create user!", e);
-            throw new DAOException("Cannot create user!", e);
+            throw new DataAddingException("Cannot create user!", e);
         }
 
         return true;
     }
 
+    /**
+     * Finds a user in the database by email and password.
+     *
+     * @param email    the email of the user
+     * @param password the password of the user
+     * @return the user, if found, otherwise an empty optional
+     * @throws DataReadingException if there was an error reading the user
+     */
     @Override
-    public User findUserByEmailAndPassword(String email, String password) throws DAOException {
+    public Optional<User> findUserByEmailAndPassword(String email, String password) throws DataReadingException {
         if (!UtilDAO.isTableExists(EnumDBNameTable.USER_TABLE.getEnumDBEnvironment())) {
-            logger.info("Read user wasn't successful! Table \" " +
-                    EnumDBNameTable.USER_TABLE.getEnumDBEnvironment() + "\" not exists!");
-            throw new DAOException("Read user wasn't successful! Table \" " +
+            logger.info("Read user wasn't successful! Table \"{}\" not exists!",
+                    EnumDBNameTable.USER_TABLE.getEnumDBEnvironment());
+            throw new DataReadingException("Read user wasn't successful! Table \" " +
                     EnumDBNameTable.USER_TABLE.getEnumDBEnvironment() + "\" not exists!");
         }
 
-        User user = null;
+        Optional<User> user = Optional.empty();
 
         try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(QueryUser.findUserByEmailAndPassword())
+             PreparedStatement statement = connection.prepareStatement(QueryUser.FIND_USER_BY_EMAIL_AND_PASSWORD)
         ) {
             statement.setString(1, email);
             statement.setString(2, password);
@@ -80,7 +88,7 @@ public class UserDAOMySQLImpl implements UserDAO {
                     String firstName = resultSet.getString("first_name");
                     String lastName = resultSet.getString("last_name");
 
-                    user = new User(firstName, lastName, email, password);
+                    user = Optional.of(new User(firstName, lastName, email, password));
                 }
                 logger.info("Read user was successful!");
             }
@@ -91,12 +99,19 @@ public class UserDAOMySQLImpl implements UserDAO {
         return user;
     }
 
-    private boolean userIsExist(User user) throws DAOException {
+    /**
+     * Checks if a user with the given email exists in the database.
+     *
+     * @param user the user to check
+     * @return true if the user exists, false otherwise
+     * @throws DataReadingException if there was an error reading the user
+     */
+    private boolean userIsExist(User user) throws DataReadingException {
 
         boolean flag = false;
 
         try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(QueryUser.findUserByEmailAndPassword())
+             PreparedStatement statement = connection.prepareStatement(QueryUser.FIND_USER_BY_EMAIL_AND_PASSWORD)
         ) {
             statement.setString(1, user.getEmail());
             statement.setString(2, user.getPassword());
@@ -107,9 +122,10 @@ public class UserDAOMySQLImpl implements UserDAO {
             logger.info("Check user exist was successful!");
         } catch (SQLException e) {
             logger.error("Cannot check user!", e);
-            throw new DAOException("Cannot check user!", e);
+            throw new DataReadingException("Cannot check user!", e);
         }
         return flag;
     }
-
 }
+
+

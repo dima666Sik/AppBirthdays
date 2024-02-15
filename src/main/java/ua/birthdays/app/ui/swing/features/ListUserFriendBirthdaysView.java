@@ -2,23 +2,23 @@ package ua.birthdays.app.ui.swing.features;
 
 import ua.birthdays.app.dao.env.EnumStateSorted;
 import ua.birthdays.app.dao.env.PeriodTimeEnum;
-import ua.birthdays.app.domain.exceptions.DomainException;
+import ua.birthdays.app.domain.exceptions.OpenFileException;
 import ua.birthdays.app.domain.impl.CSVWriterServiceImpl;
-import ua.birthdays.app.domain.impl.MainFeaturesServiceImpl;
+import ua.birthdays.app.domain.impl.UserFriendsDataServiceImpl;
 import ua.birthdays.app.domain.impl.PDFWriterServiceImpl;
-import ua.birthdays.app.domain.interfaces.FileWriterService;
-import ua.birthdays.app.domain.interfaces.MainFeaturesService;
+import ua.birthdays.app.domain.FileWriterService;
+import ua.birthdays.app.domain.UserFriendsDataService;
 import ua.birthdays.app.models.*;
 import ua.birthdays.app.models.audio.Audio;
 import ua.birthdays.app.models.audio.MP3Player;
 import ua.birthdays.app.ui.swing.menuview.HomeView;
+import ua.birthdays.app.ui.swing.util.ConstantPhrases;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -28,7 +28,7 @@ import java.util.Locale;
 import java.util.concurrent.*;
 
 public class ListUserFriendBirthdaysView extends JFrame {
-    private final static int COUNT_COLUMN = 7;
+    private static final int COUNT_COLUMN = 7;
 
     private JPanel panelListFriendBirthdays;
     private JTable table;
@@ -53,7 +53,7 @@ public class ListUserFriendBirthdaysView extends JFrame {
     private final Audio audioCongratulationsMP3 = new MP3Player("src/main/resources/sounds/congratulations_sound.mp3");
     private final Audio backgroundSoundMP3 = new MP3Player("src/main/resources/sounds/background.mp3");
     private final User user;
-    private MainFeaturesService mainFeaturesService;
+    private UserFriendsDataService userFriendsDataService;
     private EnumStateSorted enumStateSorted;
     private List<UserFriendsData> userFriendsDataList;
 
@@ -61,7 +61,8 @@ public class ListUserFriendBirthdaysView extends JFrame {
         this.user = user;
         setUndecorated(true);
         setContentPane(panelListFriendBirthdays);
-        labelCurrentUser.setText(user.getFirstName().concat(","));
+        labelCurrentUser.setText(user.getFirstName()
+                                     .concat(","));
         labelCurrentUserEmail.setText(user.getEmail());
         startRemainingService();
         createTable();
@@ -74,20 +75,21 @@ public class ListUserFriendBirthdaysView extends JFrame {
 
     private void startRemainingService() {
         // Create ScheduledExecutorService with one work thread
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
-        MainFeaturesService mainFeaturesService = new MainFeaturesServiceImpl();
+        userFriendsDataService = new UserFriendsDataServiceImpl();
         Icon icon = new ImageIcon("src/main/resources/imgs/present.png");
 
-        List<UserFriendsData> userFriendsDataList = mainFeaturesService.readAllUserFriendsDataByDefault(user);
-
-        System.out.println(LocalDateTime.now());
+        userFriendsDataList = userFriendsDataService.readAllUserFriendsDataByDefault(user);
 
         for (UserFriendsData userFriendsData : userFriendsDataList) {
 
-            long reminderDaysBefore = userFriendsData.getFriendBirthdayDate().getRemindedCountDaysBeforeBirthday();
+            long reminderDaysBefore = userFriendsData.getFriendBirthdayDate()
+                                                     .getRemindedCountDaysBeforeBirthday();
             LocalDate today = LocalDate.now();
-            LocalDate nextBirthday = userFriendsData.getFriendBirthdayDate().getFriendDate().withYear(today.getYear());
+            LocalDate nextBirthday = userFriendsData.getFriendBirthdayDate()
+                                                    .getFriendDate()
+                                                    .withYear(today.getYear());
 
             if (nextBirthday.isBefore(today) || nextBirthday.isEqual(today)) {
                 continue;
@@ -97,17 +99,21 @@ public class ListUserFriendBirthdaysView extends JFrame {
             if (daysUntilBirthday > reminderDaysBefore) continue;
             long initialDelay = daysUntilBirthday - reminderDaysBefore;
 
-            int remindedFriendHour = userFriendsData.getFriendBirthdayDate().getRemindedFriendHour();
-            int remindedFriendHourWithPeriod = (userFriendsData.getFriendBirthdayDate().getPeriodTimeEnum() == PeriodTimeEnum.AM)
+            int remindedFriendHour = userFriendsData.getFriendBirthdayDate()
+                                                    .getRemindedFriendHour();
+            int remindedFriendHourWithPeriod = (userFriendsData.getFriendBirthdayDate()
+                                                               .getPeriodTimeEnum() == PeriodTimeEnum.AM)
                     ? remindedFriendHour
                     : remindedFriendHour + 12;
 
             // Target time
             LocalTime targetTime = LocalTime.of(remindedFriendHourWithPeriod,
-                    userFriendsData.getFriendBirthdayDate().getRemindedFriendMinutes());
+                    userFriendsData.getFriendBirthdayDate()
+                                   .getRemindedFriendMinutes());
 
             // convert reminding date on minute
-            long hourMinutesOnScheduler = LocalTime.now().until(targetTime, ChronoUnit.MINUTES);
+            long hourMinutesOnScheduler = LocalTime.now()
+                                                   .until(targetTime, ChronoUnit.MINUTES);
             if (hourMinutesOnScheduler < 0)
                 hourMinutesOnScheduler = targetTime.until(LocalTime.now(), ChronoUnit.MINUTES);
 
@@ -123,12 +129,16 @@ public class ListUserFriendBirthdaysView extends JFrame {
 
                 JOptionPane.showOptionDialog(this,
                         "Your friend's '" +
-                                userFriendsData.getAboutFriend().getNameFriend() +
+                                userFriendsData.getAboutFriend()
+                                               .getNameFriend() +
                                 "' birthday is in " +
                                 daysUntilBirthday +
                                 " days! \n\t" +
                                 "Happy " +
-                                (LocalDate.now().getYear() - userFriendsData.getFriendBirthdayDate().getFriendDate().getYear()) +
+                                (LocalDate.now()
+                                          .getYear() - userFriendsData.getFriendBirthdayDate()
+                                                                      .getFriendDate()
+                                                                      .getYear()) +
                                 "-th birthday\n",
                         "REMIND INFORMATION MESSAGE ABOUT FRIEND`S BIRTHDAYS",
                         JOptionPane.OK_CANCEL_OPTION,
@@ -146,7 +156,7 @@ public class ListUserFriendBirthdaysView extends JFrame {
 
     private void createTable() {
         //get data
-        mainFeaturesService = new MainFeaturesServiceImpl();
+        userFriendsDataService = new UserFriendsDataServiceImpl();
 
         chooseSortedByEnum(EnumStateSorted.DEFAULT);
 
@@ -167,7 +177,8 @@ public class ListUserFriendBirthdaysView extends JFrame {
                     if (table.getSelectedRow() == -1) return;
 
                     objectRowUserFriendBirthday = dataUserFriendsBirthdayOnTable[table.getSelectedRow()];
-                    LocalDate oldVersionDate = LocalDate.parse(objectRowUserFriendBirthday[2].toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.getDefault()));
+                    LocalDate oldVersionDate = LocalDate.parse(objectRowUserFriendBirthday[2].toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                                                                                                           .withLocale(Locale.getDefault()));
 
                     new EditUserFriendBirthdayView(
                             new UserFriendsData(
@@ -198,9 +209,10 @@ public class ListUserFriendBirthdaysView extends JFrame {
                     new String[]{"Yes I do", "No I don't"}, null) == 1) return;
 
             objectRowUserFriendBirthday = dataUserFriendsBirthdayOnTable[table.getSelectedRow()];
-            LocalDate friendBirthdayDate = LocalDate.parse(objectRowUserFriendBirthday[2].toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.getDefault()));
+            LocalDate friendBirthdayDate = LocalDate.parse(objectRowUserFriendBirthday[2].toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                                                                                                       .withLocale(Locale.getDefault()));
 
-            if (!mainFeaturesService.deleteUserFriendsData(new UserFriendsData(
+            if (!userFriendsDataService.deleteUserFriendsData(new UserFriendsData(
                     new FriendBirthdayDate(friendBirthdayDate,
                             Integer.parseInt(objectRowUserFriendBirthday[3].toString()),
                             Integer.parseInt(objectRowUserFriendBirthday[4].toString()),
@@ -212,7 +224,7 @@ public class ListUserFriendBirthdaysView extends JFrame {
             ))) {
                 JOptionPane.showMessageDialog(this,
                         "Deleting select User Friend Birthday was unsuccessful!",
-                        "Try again",
+                        ConstantPhrases.TRY_AGAIN_MESSAGE,
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -239,27 +251,30 @@ public class ListUserFriendBirthdaysView extends JFrame {
             objectRowUserFriendBirthday = dataUserFriendsBirthdayOnTable[table.getSelectedRow()];
         });
 
-        panelScrollTable.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK), "ctrlV");
-        panelScrollTable.getActionMap().put("ctrlV", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (objectRowUserFriendBirthday != null) {
-                    LocalDate oldVersionDate = LocalDate.parse(objectRowUserFriendBirthday[2].toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.getDefault()));
+        panelScrollTable.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                        .put(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK), "ctrlV");
+        panelScrollTable.getActionMap()
+                        .put("ctrlV", new AbstractAction() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                if (objectRowUserFriendBirthday != null) {
+                                    LocalDate oldVersionDate = LocalDate.parse(objectRowUserFriendBirthday[2].toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                                                                                                                           .withLocale(Locale.getDefault()));
 
-                    new CreateUserFriendBirthdayView(new UserFriendsData(
-                            new FriendBirthdayDate(oldVersionDate,
-                                    Integer.parseInt(objectRowUserFriendBirthday[3].toString()),
-                                    Integer.parseInt(objectRowUserFriendBirthday[4].toString()),
-                                    PeriodTimeEnum.valueOf(objectRowUserFriendBirthday[5].toString()),
-                                    Integer.parseInt(objectRowUserFriendBirthday[6].toString())
-                            ),
-                            new AboutFriend(objectRowUserFriendBirthday[1].toString()),
-                            user
-                    ));
-                    chooseSortedByEnum(enumStateSorted);
-                }
-            }
-        });
+                                    new CreateUserFriendBirthdayView(new UserFriendsData(
+                                            new FriendBirthdayDate(oldVersionDate,
+                                                    Integer.parseInt(objectRowUserFriendBirthday[3].toString()),
+                                                    Integer.parseInt(objectRowUserFriendBirthday[4].toString()),
+                                                    PeriodTimeEnum.valueOf(objectRowUserFriendBirthday[5].toString()),
+                                                    Integer.parseInt(objectRowUserFriendBirthday[6].toString())
+                                            ),
+                                            new AboutFriend(objectRowUserFriendBirthday[1].toString()),
+                                            user
+                                    ));
+                                    chooseSortedByEnum(enumStateSorted);
+                                }
+                            }
+                        });
 
         onOffBackgroundMusic.addActionListener(e -> {
             if (onOffBackgroundMusic.isSelected()) {
@@ -282,10 +297,10 @@ public class ListUserFriendBirthdaysView extends JFrame {
                 FileWriterService csvWriterService = new CSVWriterServiceImpl();
                 try {
                     csvWriterService.writeDataIntoFile(patch, userFriendsDataList);
-                } catch (DomainException ex) {
+                } catch (OpenFileException ex) {
                     JOptionPane.showMessageDialog(this,
                             "Create file isn't successful!",
-                            "Try again",
+                            ConstantPhrases.TRY_AGAIN_MESSAGE,
                             JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -297,10 +312,10 @@ public class ListUserFriendBirthdaysView extends JFrame {
                 FileWriterService csvWriterService = new PDFWriterServiceImpl();
                 try {
                     csvWriterService.writeDataIntoFile(patch, userFriendsDataList);
-                } catch (DomainException ex) {
+                } catch (OpenFileException ex) {
                     JOptionPane.showMessageDialog(this,
                             "Create file isn't successful!",
-                            "Try again",
+                            ConstantPhrases.TRY_AGAIN_MESSAGE,
                             JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -310,7 +325,9 @@ public class ListUserFriendBirthdaysView extends JFrame {
     private String getAbsolutePathToChooseDirectory() {
         try {
             // Save current view, in order to restore it later.
-            String currentLookAndFeel = UIManager.getLookAndFeel().getClass().getName();
+            String currentLookAndFeel = UIManager.getLookAndFeel()
+                                                 .getClass()
+                                                 .getName();
 
             // Set system appearance only for JFileChooser
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -324,15 +341,18 @@ public class ListUserFriendBirthdaysView extends JFrame {
                 // Restore previous view after close JFileChooser
                 try {
                     UIManager.setLookAndFeel(currentLookAndFeel);
-                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                         UnsupportedLookAndFeelException ex) {
                     ex.printStackTrace();
                 }
             });
 
             // Open JFileChooser
             if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-                System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
-                return fileChooser.getSelectedFile().getAbsolutePath();
+                System.out.println(fileChooser.getSelectedFile()
+                                              .getAbsolutePath());
+                return fileChooser.getSelectedFile()
+                                  .getAbsolutePath();
             }
         } catch (Exception e1) {
             e1.printStackTrace();
@@ -344,23 +364,23 @@ public class ListUserFriendBirthdaysView extends JFrame {
 
         switch (enumStateSorted) {
             case ASCENDING_NAME_FRIEND: {
-                userFriendsDataList = mainFeaturesService.readAllUserFriendsDataAscendingByNameFriend(user);
+                userFriendsDataList = userFriendsDataService.readAllUserFriendsDataAscendingByNameFriend(user);
                 break;
             }
             case DESCENDING_NAME_FRIEND: {
-                userFriendsDataList = mainFeaturesService.readAllUserFriendsDataDescendingByNameFriend(user);
+                userFriendsDataList = userFriendsDataService.readAllUserFriendsDataDescendingByNameFriend(user);
                 break;
             }
             case ASCENDING_FRIEND_BIRTHDAY_DATE: {
-                userFriendsDataList = mainFeaturesService.readAllUserFriendsDataAscendingByFriendBirthdayDate(user);
+                userFriendsDataList = userFriendsDataService.readAllUserFriendsDataAscendingByFriendBirthdayDate(user);
                 break;
             }
             case DESCENDING_FRIEND_BIRTHDAY_DATE: {
-                userFriendsDataList = mainFeaturesService.readAllUserFriendsDataDescendingByFriendBirthdayDate(user);
+                userFriendsDataList = userFriendsDataService.readAllUserFriendsDataDescendingByFriendBirthdayDate(user);
                 break;
             }
             case DEFAULT: {
-                userFriendsDataList = mainFeaturesService.readAllUserFriendsDataByDefault(user);
+                userFriendsDataList = userFriendsDataService.readAllUserFriendsDataByDefault(user);
                 break;
             }
         }
@@ -377,12 +397,24 @@ public class ListUserFriendBirthdaysView extends JFrame {
 
         for (int i = 0; i < readAllUserFriendsData.size(); i++) {
             dataTableModel[i][0] = i + 1;
-            dataTableModel[i][1] = readAllUserFriendsData.get(i).getAboutFriend().getNameFriend();
-            dataTableModel[i][2] = readAllUserFriendsData.get(i).getFriendBirthdayDate().getFriendDate();
-            dataTableModel[i][3] = readAllUserFriendsData.get(i).getFriendBirthdayDate().getRemindedFriendHour();
-            dataTableModel[i][4] = readAllUserFriendsData.get(i).getFriendBirthdayDate().getRemindedFriendMinutes();
-            dataTableModel[i][5] = readAllUserFriendsData.get(i).getFriendBirthdayDate().getPeriodTimeEnum();
-            dataTableModel[i][6] = readAllUserFriendsData.get(i).getFriendBirthdayDate().getRemindedCountDaysBeforeBirthday();
+            dataTableModel[i][1] = readAllUserFriendsData.get(i)
+                                                         .getAboutFriend()
+                                                         .getNameFriend();
+            dataTableModel[i][2] = readAllUserFriendsData.get(i)
+                                                         .getFriendBirthdayDate()
+                                                         .getFriendDate();
+            dataTableModel[i][3] = readAllUserFriendsData.get(i)
+                                                         .getFriendBirthdayDate()
+                                                         .getRemindedFriendHour();
+            dataTableModel[i][4] = readAllUserFriendsData.get(i)
+                                                         .getFriendBirthdayDate()
+                                                         .getRemindedFriendMinutes();
+            dataTableModel[i][5] = readAllUserFriendsData.get(i)
+                                                         .getFriendBirthdayDate()
+                                                         .getPeriodTimeEnum();
+            dataTableModel[i][6] = readAllUserFriendsData.get(i)
+                                                         .getFriendBirthdayDate()
+                                                         .getRemindedCountDaysBeforeBirthday();
         }
         return dataTableModel;
     }

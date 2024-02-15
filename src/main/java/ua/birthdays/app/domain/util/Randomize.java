@@ -1,7 +1,11 @@
 package ua.birthdays.app.domain.util;
 
-public class Randomize {
+public final class Randomize {
+    private Randomize() {
+    }
+
     public static int generateRandomize(int min, int max) {
-        return (int) Math.floor(Math.random() * (max - min + 1) + min);
+        double randomValue = Math.random();
+        return (int) Math.floor(randomValue * (max - min + 1) + min);
     }
 }

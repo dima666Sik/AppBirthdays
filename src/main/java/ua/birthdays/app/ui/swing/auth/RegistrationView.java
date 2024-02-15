@@ -1,8 +1,9 @@
 package ua.birthdays.app.ui.swing.auth;
 
+import ua.birthdays.app.domain.AuthService;
 import ua.birthdays.app.domain.impl.AuthServiceImpl;
-import ua.birthdays.app.domain.interfaces.AuthService;
 import ua.birthdays.app.ui.swing.menuview.HomeView;
+import ua.birthdays.app.ui.swing.util.ConstantPhrases;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,7 +52,7 @@ public class RegistrationView extends JDialog {
         ) {
             JOptionPane.showMessageDialog(this,
                     "Please fill all fields...",
-                    "Try again",
+                    ConstantPhrases.TRY_AGAIN_MESSAGE,
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -59,7 +60,7 @@ public class RegistrationView extends JDialog {
         if (!Arrays.equals(password.getPassword(), confirmPassword.getPassword())) {
             JOptionPane.showMessageDialog(this,
                     "Fields 'password' and 'confirm password' is not equals...",
-                    "Try again",
+                    ConstantPhrases.TRY_AGAIN_MESSAGE,
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -67,7 +68,7 @@ public class RegistrationView extends JDialog {
         if (password.getPassword().length < 8) {
             JOptionPane.showMessageDialog(this,
                     "Password less 8 symbols.",
-                    "Try again",
+                    ConstantPhrases.TRY_AGAIN_MESSAGE,
                     JOptionPane.WARNING_MESSAGE);
             return;
 
@@ -82,7 +83,7 @@ public class RegistrationView extends JDialog {
         } else {
             JOptionPane.showMessageDialog(this,
                     "User is not register! Please change email.",
-                    "Try again",
+                    ConstantPhrases.TRY_AGAIN_MESSAGE,
                     JOptionPane.WARNING_MESSAGE);
             clearFieldsForm();
         }

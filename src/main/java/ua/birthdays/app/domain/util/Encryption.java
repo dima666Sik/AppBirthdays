@@ -1,6 +1,6 @@
 package ua.birthdays.app.domain.util;
 
-import ua.birthdays.app.domain.exceptions.DomainException;
+import ua.birthdays.app.domain.exceptions.CryptographicAlgorithmException;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -9,15 +9,17 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-public class Encryption {
+public final class Encryption {
+    private Encryption() {
+    }
+
     /**
      * A method for encrypting a password using the SHA-256 algorithm.
      *
      * @param password an array of characters representing the password to be encrypted.
      * @return the encrypted password as a string with hexadecimal values.
-     * @throws DomainException if an error occurs during encryption.
      */
-    public static String encryptionSHA256(char[] password) throws DomainException {
+    public static String encryptionSHA256(char[] password) {
         try {
             MessageDigest md5 = MessageDigest.getInstance("SHA-256");
             StringBuilder stringBuilder = new StringBuilder();
@@ -27,7 +29,7 @@ public class Encryption {
             }
             return new String(stringBuilder);
         } catch (NoSuchAlgorithmException e) {
-            throw new DomainException("Cryptographic algorithm isn't available!", e);
+            throw new CryptographicAlgorithmException("Cryptographic algorithm isn't available!", e);
         }
     }
 

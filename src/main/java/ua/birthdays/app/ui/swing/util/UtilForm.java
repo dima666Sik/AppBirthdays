@@ -1,6 +1,9 @@
 package ua.birthdays.app.ui.swing.util;
 
-public class UtilForm {
+public final class UtilForm {
+    private UtilForm() {
+    }
+
     /**
      * Checks if the passed string is a number.
      *

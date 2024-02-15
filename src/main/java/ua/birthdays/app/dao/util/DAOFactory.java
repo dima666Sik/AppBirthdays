@@ -1,9 +1,9 @@
 package ua.birthdays.app.dao.util;
 
-import ua.birthdays.app.dao.interfaces.AboutFriendDAO;
-import ua.birthdays.app.dao.interfaces.FriendBirthdayDateDAO;
-import ua.birthdays.app.dao.interfaces.UserDAO;
-import ua.birthdays.app.dao.interfaces.UserFriendsDataDAO;
+import ua.birthdays.app.dao.AboutFriendDAO;
+import ua.birthdays.app.dao.FriendBirthdayDateDAO;
+import ua.birthdays.app.dao.UserDAO;
+import ua.birthdays.app.dao.UserFriendsDataDAO;
 import ua.birthdays.app.dao.mysql.impl.AboutFriendDAOMySQLImpl;
 import ua.birthdays.app.dao.mysql.impl.FriendBirthdayDateDAOMySQLImpl;
 import ua.birthdays.app.dao.mysql.impl.UserDAOMySQLImpl;
@@ -13,7 +13,10 @@ import ua.birthdays.app.dao.mysql.impl.UserFriendsDataDAOMySQLImpl;
  * Factory for creating data access objects (DAO).
  * Used to obtain instances of DAO implementations for specific objects.
  */
-public class DAOFactory {
+public final class DAOFactory {
+    private DAOFactory() {
+    }
+
     public static UserDAO getUserAuthDao() {
         return new UserDAOMySQLImpl();
     }

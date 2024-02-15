@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: app_birthdays
+      MYSQL_ROOT_PASSWORD: root

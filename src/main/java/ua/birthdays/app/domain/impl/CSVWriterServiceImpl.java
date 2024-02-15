@@ -3,8 +3,8 @@ package ua.birthdays.app.domain.impl;
 import com.opencsv.CSVWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.birthdays.app.domain.exceptions.DomainException;
-import ua.birthdays.app.domain.interfaces.FileWriterService;
+import ua.birthdays.app.domain.FileWriterService;
+import ua.birthdays.app.domain.exceptions.OpenFileException;
 import ua.birthdays.app.domain.util.Randomize;
 import ua.birthdays.app.models.UserFriendsData;
 
@@ -17,10 +17,10 @@ import java.util.List;
  * Implementation of the {@link FileWriterService} interface that writes user friend birthday data into a CSV file.
  */
 public class CSVWriterServiceImpl implements FileWriterService {
-    private final static Logger logger = LogManager.getLogger(CSVWriterServiceImpl.class.getName());
+    private static final Logger logger = LogManager.getLogger(CSVWriterServiceImpl.class.getName());
 
     @Override
-    public void writeDataIntoFile(final String patch, final List<UserFriendsData> userFriendsDataList) throws DomainException {
+    public void writeDataIntoFile(final String patch, final List<UserFriendsData> userFriendsDataList) throws OpenFileException {
         String nameCSVFile = "yourFriendsBirthdays" + Randomize.generateRandomize(0, 100000) + ".csv";
 
         try {
@@ -30,7 +30,6 @@ public class CSVWriterServiceImpl implements FileWriterService {
             // Param "true" meaning that data add into end file.
             FileWriter fileWriter = new FileWriter(file, true);
 
-            // Create object CSVWriter
             CSVWriter csvWriter = new CSVWriter(fileWriter);
 
             // Record data into CSV-file
@@ -39,19 +38,21 @@ public class CSVWriterServiceImpl implements FileWriterService {
             for (UserFriendsData userFriendsData : userFriendsDataList) {
                 csvWriter.writeNext(new String[]{
                         userFriendsData.getAboutFriend().getNameFriend(),
-                        userFriendsData.getFriendBirthdayDate().getFriendDate().toString(),
-                        String.valueOf(userFriendsData.getFriendBirthdayDate().getRemindedCountDaysBeforeBirthday())
+                        userFriendsData.getFriendBirthdayDate()
+                                       .getFriendDate().toString(),
+                        String.valueOf(userFriendsData.getFriendBirthdayDate()
+                                                      .getRemindedCountDaysBeforeBirthday())
                 });
             }
 
             // Close CSVWriter
             csvWriter.close();
 
-            logger.info("Your data successful added to csv file. in this patch: " + patch + nameCSVFile);
+            logger.info("Your data successful added to csv file. in this patch: {}{}", patch, nameCSVFile);
 
         } catch (IOException e) {
             logger.info("Error find file .csv!", e);
-            throw new DomainException("Error find file .csv!", e);
+            throw new OpenFileException("Error find file .csv!", e);
         }
     }
 }

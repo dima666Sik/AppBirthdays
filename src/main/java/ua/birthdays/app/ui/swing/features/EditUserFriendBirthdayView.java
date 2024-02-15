@@ -2,11 +2,13 @@ package ua.birthdays.app.ui.swing.features;
 
 import com.toedter.calendar.JDateChooser;
 import ua.birthdays.app.dao.env.PeriodTimeEnum;
-import ua.birthdays.app.domain.impl.MainFeaturesServiceImpl;
-import ua.birthdays.app.domain.interfaces.MainFeaturesService;
+import ua.birthdays.app.domain.impl.UserFriendsDataServiceImpl;
+import ua.birthdays.app.domain.UserFriendsDataService;
 import ua.birthdays.app.models.AboutFriend;
 import ua.birthdays.app.models.FriendBirthdayDate;
 import ua.birthdays.app.models.UserFriendsData;
+import ua.birthdays.app.ui.swing.util.CheckValidDataForm;
+import ua.birthdays.app.ui.swing.util.ConstantPhrases;
 import ua.birthdays.app.ui.swing.util.UtilForm;
 
 import javax.swing.*;
@@ -64,7 +66,7 @@ public class EditUserFriendBirthdayView extends JDialog {
     }
 
     private void editUserFriendBirthday(UserFriendsData userFriendsData) {
-        MainFeaturesService mainFeaturesService = new MainFeaturesServiceImpl();
+        UserFriendsDataService userFriendsDataService = new UserFriendsDataServiceImpl();
         if (jDateChooser.getDate().toInstant().atZone(
                 ZoneId.systemDefault()).toLocalDate().isEqual(userFriendsData.getFriendBirthdayDate().getFriendDate()) &&
                 textFieldFriendName.getText().equals(userFriendsData.getAboutFriend().getNameFriend()) &&
@@ -74,63 +76,40 @@ public class EditUserFriendBirthdayView extends JDialog {
         ) {
             JOptionPane.showMessageDialog(this,
                     "You not edit any parameter. Edit one of them. Or cancel operation.",
-                    "Try again",
+                    ConstantPhrases.TRY_AGAIN_MESSAGE,
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        if (textFieldFriendName.getText().isEmpty() ||
-                textFieldRemindingHour.getText().isEmpty() ||
-                textFieldRemindingMinutes.getText().isEmpty() ||
-                textFieldRemindingCountDaysBeforeBirthday.getText().isEmpty()
-        ) {
-            JOptionPane.showMessageDialog(this,
-                    "Please full all fields!",
-                    "Try again",
-                    JOptionPane.WARNING_MESSAGE);
+        if (CheckValidDataForm.isFieldsEmpty(this, textFieldFriendName.getText(),
+                textFieldRemindingHour.getText(),
+                textFieldRemindingMinutes.getText(),
+                textFieldRemindingCountDaysBeforeBirthday.getText()))
             return;
-        }
 
-        if (!UtilForm.isNumber(textFieldRemindingHour.getText()) ||
-                !UtilForm.isNumber(textFieldRemindingMinutes.getText()) ||
-                !UtilForm.isNumber(textFieldRemindingCountDaysBeforeBirthday.getText())
-        ) {
-            JOptionPane.showMessageDialog(this,
-                    "Please remove letters from fields where you have to write numbers!",
-                    "Try again",
-                    JOptionPane.WARNING_MESSAGE);
+        if (!CheckValidDataForm.isFieldsNumber(this,
+                textFieldRemindingHour.getText(),
+                textFieldRemindingMinutes.getText(),
+                textFieldRemindingCountDaysBeforeBirthday.getText()))
             return;
-        }
 
         int remindingHour = Integer.parseInt(textFieldRemindingHour.getText());
         int remindingMinutes = Integer.parseInt(textFieldRemindingMinutes.getText());
         int remindingCountDaysBeforeBirthday = Integer.parseInt(textFieldRemindingCountDaysBeforeBirthday.getText());
 
-        if (remindingHour < 0 || remindingHour > 12) {
-            JOptionPane.showMessageDialog(this,
-                    "Hour can not be upper than 12 and less 0!",
-                    "Try again",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        if(!CheckValidDataForm.isCheckReminderDistance(this, remindingHour,
+                0, 12,
+                ConstantPhrases.HOUR_ERROR_MESSAGE)) return;
 
-        if (remindingMinutes < 0 || remindingMinutes > 59) {
-            JOptionPane.showMessageDialog(this,
-                    "Minutes can not be upper than 59 and less 0!",
-                    "Try again",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        if(!CheckValidDataForm.isCheckReminderDistance(this, remindingMinutes,
+                0, 59,
+                ConstantPhrases.MINUTES_ERROR_MESSAGE)) return;
 
-        if (remindingCountDaysBeforeBirthday < 0 || remindingCountDaysBeforeBirthday > 10) {
-            JOptionPane.showMessageDialog(this,
-                    "Reminding Count Days Before Birthday can not be upper than 10 and less 0!",
-                    "Try again",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        if(!CheckValidDataForm.isCheckReminderDistance(this, remindingCountDaysBeforeBirthday,
+                0, 10,
+                ConstantPhrases.REMINDING_COUNT_DAYS_ERROR_MESSAGE)) return;
 
-        if (!mainFeaturesService.updateUserFriendsData(userFriendsData,
+        if (!userFriendsDataService.updateUserFriendsData(userFriendsData,
                 new UserFriendsData(
                         new FriendBirthdayDate(
                                 jDateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
@@ -145,7 +124,7 @@ public class EditUserFriendBirthdayView extends JDialog {
         )) {
             JOptionPane.showMessageDialog(this,
                     "Editing select User Friend Birthday was unsuccessful!",
-                    "Try again",
+                    ConstantPhrases.TRY_AGAIN_MESSAGE,
                     JOptionPane.ERROR_MESSAGE);
             return;
         }

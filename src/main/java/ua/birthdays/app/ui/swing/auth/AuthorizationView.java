@@ -1,13 +1,15 @@
 package ua.birthdays.app.ui.swing.auth;
 
 import ua.birthdays.app.domain.impl.AuthServiceImpl;
-import ua.birthdays.app.domain.interfaces.AuthService;
+import ua.birthdays.app.domain.AuthService;
 import ua.birthdays.app.models.User;
 import ua.birthdays.app.ui.swing.features.ListUserFriendBirthdaysView;
 import ua.birthdays.app.ui.swing.menuview.HomeView;
+import ua.birthdays.app.ui.swing.util.ConstantPhrases;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Optional;
 
 public class AuthorizationView extends JDialog {
     private JTextField emailField;
@@ -41,12 +43,13 @@ public class AuthorizationView extends JDialog {
     }
 
     private void authorization() {
-        if (emailField.getText().isEmpty() ||
+        if (emailField.getText()
+                      .isEmpty() ||
                 passwordField.getPassword().length == 0
         ) {
             JOptionPane.showMessageDialog(this,
                     "Please fill all fields...",
-                    "Try again",
+                    ConstantPhrases.TRY_AGAIN_MESSAGE,
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -54,19 +57,19 @@ public class AuthorizationView extends JDialog {
         if (passwordField.getPassword().length < 8) {
             JOptionPane.showMessageDialog(this,
                     "Password less 8 symbols.",
-                    "Try again",
+                    ConstantPhrases.TRY_AGAIN_MESSAGE,
                     JOptionPane.WARNING_MESSAGE);
             return;
 
         }
 
         AuthService authService = new AuthServiceImpl();
-        User user = authService.authorization(emailField.getText(), passwordField.getPassword());
+        Optional<User> user = authService.authorization(emailField.getText(), passwordField.getPassword());
 
-        if (user == null) {
+        if (user.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "Authorization not successful!",
-                    "Try again",
+                    ConstantPhrases.TRY_AGAIN_MESSAGE,
                     JOptionPane.WARNING_MESSAGE);
 
             clearFieldsForm();
@@ -74,7 +77,7 @@ public class AuthorizationView extends JDialog {
         }
 
         dispose();
-        new ListUserFriendBirthdaysView(user);
+        new ListUserFriendBirthdaysView(user.get());
     }
 
     private void clearFieldsForm() {

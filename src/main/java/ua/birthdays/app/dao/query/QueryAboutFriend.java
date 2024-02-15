@@ -1,16 +1,17 @@
 package ua.birthdays.app.dao.query;
 
 public class QueryAboutFriend {
-
-    public static String createTableAboutFriend() {
-        return "create table about_friend(\n" +
-                "   id_about_friend bigint(10) unsigned AUTO_INCREMENT NOT NULL,\n" +
-                "   name_friend varchar(60),\n" +
-                "   PRIMARY KEY(id_about_friend)\n" +
-                "   );";
+    private QueryAboutFriend() {
     }
 
-    public static String createAboutFriend() {
-        return "insert into about_friend (name_friend) values (?);";
-    }
+    public static final String CREATE_TABLE_ABOUT_FRIEND =
+            "CREATE TABLE about_friend (\n" +
+                    "   id_about_friend bigint(10) unsigned AUTO_INCREMENT NOT NULL,\n" +
+                    "   name_friend varchar(60),\n" +
+                    "   PRIMARY KEY(id_about_friend)\n" +
+                    ");";
+
+    public static final String INSERT_INTO_ABOUT_FRIEND =
+            "INSERT INTO about_friend (name_friend) " +
+                    "VALUES (?);";
 }
