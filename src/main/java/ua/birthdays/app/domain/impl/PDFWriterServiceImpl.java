@@ -27,16 +27,16 @@ public class PDFWriterServiceImpl implements FileWriterService {
 
     @Override
     public void writeDataIntoFile(final String patch, final List<UserFriendsData> userFriendsDataList) throws OpenFileException {
-        String nameCSVFile = "\\yourFriendsBirthdays" + Randomize.generateRandomize(0, 100000) + ".pdf";
+        var nameCSVFile = "\\yourFriendsBirthdays" + Randomize.generateRandomize(0, 100000) + ".pdf";
 
         try {
-            PdfWriter pdfWriter = new PdfWriter(patch.concat(nameCSVFile));
-            PdfDocument pdfDocument = new PdfDocument(pdfWriter);
+            var pdfWriter = new PdfWriter(patch.concat(nameCSVFile));
+            var pdfDocument = new PdfDocument(pdfWriter);
             pdfDocument.setDefaultPageSize(PageSize.A4);
-            Document document = new Document(pdfDocument);
+            var document = new Document(pdfDocument);
 
             float colTableWidth = 190f;
-            Table tableThreeColTitle = new Table(new float[]{colTableWidth, colTableWidth, colTableWidth});
+            var tableThreeColTitle = new Table(new float[]{colTableWidth, colTableWidth, colTableWidth});
             tableThreeColTitle.setBackgroundColor(Color.BLACK, 0.7f);
 
             tableThreeColTitle.addCell(new Cell().add("Name Friend")
@@ -56,9 +56,9 @@ public class PDFWriterServiceImpl implements FileWriterService {
                                                  .setMarginRight(15f));
             document.add(tableThreeColTitle);
 
-            Table tableThreeColMain = new Table(new float[]{colTableWidth, colTableWidth, colTableWidth});
+            var tableThreeColMain = new Table(new float[]{colTableWidth, colTableWidth, colTableWidth});
 
-            for (UserFriendsData userFriendsData : userFriendsDataList) {
+            for (var userFriendsData : userFriendsDataList) {
                 tableThreeColMain.addCell(new Cell().add(userFriendsData.getAboutFriend()
                                                                         .getNameFriend())
                                                     .setBold()

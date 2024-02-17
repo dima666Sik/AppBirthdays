@@ -38,13 +38,13 @@ public class AuthServiceImpl implements AuthService {
                                 final String email,
                                 final char[] password) {
 
-        User user = new User(firstName, lastName, email, Encryption.encryptionSHA256(password));
+        var user = new User(firstName, lastName, email, Encryption.encryptionSHA256(password));
         return userDAO.createUser(user);
     }
 
     @Override
     public Optional<User> authorization(final String email, final char[] password) {
-        Optional<User> user
+        var user
                 = userDAO.findUserByEmailAndPassword(email, Encryption.encryptionSHA256(password));
 
         if (user.isEmpty()) {

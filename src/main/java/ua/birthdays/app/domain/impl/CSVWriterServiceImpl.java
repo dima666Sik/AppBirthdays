@@ -21,21 +21,21 @@ public class CSVWriterServiceImpl implements FileWriterService {
 
     @Override
     public void writeDataIntoFile(final String patch, final List<UserFriendsData> userFriendsDataList) throws OpenFileException {
-        String nameCSVFile = "yourFriendsBirthdays" + Randomize.generateRandomize(0, 100000) + ".csv";
+        var nameCSVFile = "yourFriendsBirthdays" + Randomize.generateRandomize(0, 100000) + ".csv";
 
         try {
-            File file = new File(patch, nameCSVFile);
+            var file = new File(patch, nameCSVFile);
 
             // Open file to write data.
             // Param "true" meaning that data add into end file.
-            FileWriter fileWriter = new FileWriter(file, true);
+            var fileWriter = new FileWriter(file, true);
 
-            CSVWriter csvWriter = new CSVWriter(fileWriter);
+            var csvWriter = new CSVWriter(fileWriter);
 
             // Record data into CSV-file
             csvWriter.writeNext(new String[]{"Name Friend", "Date Birthday`s", "Count Days Before Birthday"});
 
-            for (UserFriendsData userFriendsData : userFriendsDataList) {
+            for (var userFriendsData : userFriendsDataList) {
                 csvWriter.writeNext(new String[]{
                         userFriendsData.getAboutFriend().getNameFriend(),
                         userFriendsData.getFriendBirthdayDate()

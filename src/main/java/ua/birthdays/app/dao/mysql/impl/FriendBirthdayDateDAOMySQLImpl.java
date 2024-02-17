@@ -38,8 +38,8 @@ public class FriendBirthdayDateDAOMySQLImpl implements FriendBirthdayDateDAO {
     public long createFriendBirthdayDate(final FriendBirthdayDate friendBirthdayDate) {
         UtilDAO.isTableFriendBirthdayDateExist();
 
-        try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(QueryFriendBirthdayDate.INSERT_INTO_FRIEND_BIRTHDAY_DATE, Statement.RETURN_GENERATED_KEYS)) {
+        try (var connection = DBConnector.getConnection();
+             var statement = connection.prepareStatement(QueryFriendBirthdayDate.INSERT_INTO_FRIEND_BIRTHDAY_DATE, Statement.RETURN_GENERATED_KEYS)) {
             statement.setDate(1, Date.valueOf(friendBirthdayDate.getFriendDate()));
             statement.setInt(2, friendBirthdayDate.getRemindedFriendHour());
             statement.setInt(3, friendBirthdayDate.getRemindedFriendMinutes());
@@ -47,7 +47,7 @@ public class FriendBirthdayDateDAOMySQLImpl implements FriendBirthdayDateDAO {
                                                      .name());
             statement.setInt(5, friendBirthdayDate.getRemindedCountDaysBeforeBirthday());
             if (statement.executeUpdate() > 0) {
-                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                try (var generatedKeys = statement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         logger.info("Create FriendBirthdayDate was successful!");
                         return generatedKeys.getLong(1);

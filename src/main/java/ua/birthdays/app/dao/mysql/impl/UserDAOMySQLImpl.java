@@ -41,8 +41,8 @@ public class UserDAOMySQLImpl implements UserDAO {
             return false;
         }
 
-        try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(QueryUser.CREATE_USER)
+        try (var connection = DBConnector.getConnection();
+             var statement = connection.prepareStatement(QueryUser.CREATE_USER)
         ) {
             statement.setString(1, user.getFirstName());
             statement.setString(2, user.getLastName());
@@ -77,12 +77,12 @@ public class UserDAOMySQLImpl implements UserDAO {
 
         Optional<User> user = Optional.empty();
 
-        try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(QueryUser.FIND_USER_BY_EMAIL_AND_PASSWORD)
+        try (var connection = DBConnector.getConnection();
+             var statement = connection.prepareStatement(QueryUser.FIND_USER_BY_EMAIL_AND_PASSWORD)
         ) {
             statement.setString(1, email);
             statement.setString(2, password);
-            try (ResultSet resultSet = statement.executeQuery()
+            try (var resultSet = statement.executeQuery()
             ) {
                 while (resultSet.next()) {
                     String firstName = resultSet.getString("first_name");
@@ -110,15 +110,15 @@ public class UserDAOMySQLImpl implements UserDAO {
 
         boolean flag = false;
 
-        try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(QueryUser.FIND_USER_BY_EMAIL_AND_PASSWORD)
+        try (var connection = DBConnector.getConnection();
+             var statement = connection.prepareStatement(QueryUser.FIND_USER_BY_EMAIL_AND_PASSWORD)
         ) {
             statement.setString(1, user.getEmail());
             statement.setString(2, user.getPassword());
-            try (ResultSet resultSet = statement.executeQuery()
-            ) {
-                if (resultSet.next()) flag = true;
-            }
+            var resultSet = statement.executeQuery();
+
+            if (resultSet.next()) flag = true;
+
             logger.info("Check user exist was successful!");
         } catch (SQLException e) {
             logger.error("Cannot check user!", e);

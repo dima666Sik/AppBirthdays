@@ -21,8 +21,8 @@ public final class Encryption {
      */
     public static String encryptionSHA256(char[] password) {
         try {
-            MessageDigest md5 = MessageDigest.getInstance("SHA-256");
-            StringBuilder stringBuilder = new StringBuilder();
+            var md5 = MessageDigest.getInstance("SHA-256");
+            var stringBuilder = new StringBuilder();
             byte[] bytes = md5.digest(toBytes(password));
             for (byte b : bytes) {
                 stringBuilder.append(String.format("%02X", b));

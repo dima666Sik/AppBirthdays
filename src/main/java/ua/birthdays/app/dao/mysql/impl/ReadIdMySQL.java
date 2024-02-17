@@ -28,20 +28,22 @@ public class ReadIdMySQL {
 
     public static long readIdUser(final String email, final String password) {
         long id = 0;
-        try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(QueryUser.FIND_USER_BY_EMAIL_AND_PASSWORD)
+        try (var connection = DBConnector.getConnection();
+             var statement = connection.prepareStatement(QueryUser.FIND_USER_BY_EMAIL_AND_PASSWORD)
         ) {
             statement.setString(1, email);
             statement.setString(2, password);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    id = resultSet.getInt("id_user");
-                }
-                if (id == 0) {
-                    logger.error("User is not found. Check table in db!");
-                }
-                logger.info("Check id user exist successful");
+
+            var resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                id = resultSet.getInt("id_user");
             }
+            if (id == 0) {
+                logger.error("User is not found. Check table in db!");
+            }
+            logger.info("Check id user exist successful");
+
         } catch (Exception e) {
             logger.error(e);
         }
@@ -50,14 +52,14 @@ public class ReadIdMySQL {
 
     public static long readIdFriendsDataRowByIdUserAndFriendNameAndDateFriendBirthday(long idUser, String friendsName, String dateFriendBirthday) {
         long idFriendsData = 0;
-        try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.EXISTS_BY_USER_ID_AND_FRIEND_NAME_AND_FRIEND_DATE)) {
+        try (var connection = DBConnector.getConnection();
+             var statement = connection.prepareStatement(QueryUserFriendsData.EXISTS_BY_USER_ID_AND_FRIEND_NAME_AND_FRIEND_DATE)) {
             statement.setLong(1, idUser);
             statement.setString(2, friendsName);
             statement.setDate(3, Date.valueOf(dateFriendBirthday));
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) idFriendsData = resultSet.getLong("id_user_friends_data");
-            }
+
+            var resultSet = statement.executeQuery();
+            if (resultSet.next()) idFriendsData = resultSet.getLong("id_user_friends_data");
         } catch (SQLException e) {
             logger.error("Cannot check ufd row exists!", e);
             throw new DataReadingException("Cannot check ufd row exists!", e);

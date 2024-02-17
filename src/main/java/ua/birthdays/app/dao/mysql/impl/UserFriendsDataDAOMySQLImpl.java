@@ -59,8 +59,8 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
             return false;
         }
 
-        try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement
+        try (var connection = DBConnector.getConnection();
+             var statement
                      = connection.prepareStatement(QueryUserFriendsData.INSERT_USER_FRIENDS_DATA)) {
             statement.setLong(1, idAboutFriendRow);
             statement.setLong(2, idFriendBirthdayDateRow);
@@ -92,8 +92,8 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
 
         UtilDAO.isTableUserFriendDataExist();
 
-        try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement
+        try (var connection = DBConnector.getConnection();
+             var statement
                      = connection.prepareStatement(QueryUserFriendsData.FIND_USER_FRIENDS_DATA_BY_USER_ID)) {
             readByIdUserUserFriendData(user, statement);
         } catch (SQLException e) {
@@ -114,8 +114,8 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
     public List<UserFriendsData> readAllUserFriendsDataDescendingByFriendBirthdayDate(final User user) {
         userFriendsDataList = new ArrayList<>();
 
-        try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.FIND_USER_FRIENDS_DATA_BY_USER_ID_DESCENDING_FRIEND_BIRTHDAY_DATE)) {
+        try (var connection = DBConnector.getConnection();
+             var statement = connection.prepareStatement(QueryUserFriendsData.FIND_USER_FRIENDS_DATA_BY_USER_ID_DESCENDING_FRIEND_BIRTHDAY_DATE)) {
             readByIdUserUserFriendData(user, statement);
         } catch (SQLException e) {
             logger.error("Cannot Read ALL User Friends Data in Descending Ordering By Friend BirthdayDate!", e);
@@ -135,8 +135,8 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
     public List<UserFriendsData> readAllUserFriendsDataAscendingByFriendBirthdayDate(final User user) {
         userFriendsDataList = new ArrayList<>();
 
-        try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.FIND_USER_FRIENDS_DATA_BY_USER_ID_ASCENDING_FRIEND_BIRTHDAY_DATE)) {
+        try (var connection = DBConnector.getConnection();
+             var statement = connection.prepareStatement(QueryUserFriendsData.FIND_USER_FRIENDS_DATA_BY_USER_ID_ASCENDING_FRIEND_BIRTHDAY_DATE)) {
             readByIdUserUserFriendData(user, statement);
         } catch (SQLException e) {
             logger.error("Cannot Read ALL User Friends Data in Ascending Ordering By Friend BirthdayDate!", e);
@@ -156,8 +156,8 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
     public List<UserFriendsData> readAllUserFriendsDataDescendingByNameFriend(final User user) {
         userFriendsDataList = new ArrayList<>();
 
-        try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.FIND_USER_FRIENDS_DATA_BY_USER_ID_DESCENDING_NAME_FRIEND)) {
+        try (var connection = DBConnector.getConnection();
+             var statement = connection.prepareStatement(QueryUserFriendsData.FIND_USER_FRIENDS_DATA_BY_USER_ID_DESCENDING_NAME_FRIEND)) {
             readByIdUserUserFriendData(user, statement);
         } catch (SQLException e) {
             logger.error("Cannot Read ALL User Friends Data in Descending Ordering By NameFriend!", e);
@@ -168,25 +168,25 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
 
     private void readByIdUserUserFriendData(User user, PreparedStatement statement) throws SQLException {
         statement.setLong(1, ReadIdMySQL.readIdUser(user.getEmail(), user.getPassword()));
-        try (ResultSet resultSet = statement.executeQuery()) {
-            while (resultSet.next()) {
-                userFriendsDataList.add(
-                        new UserFriendsData(
-                                new FriendBirthdayDate(
-                                        resultSet.getDate("friend_date")
-                                                 .toLocalDate(),
-                                        resultSet.getInt("reminded_friend_hour"),
-                                        resultSet.getInt("reminded_friend_minutes"),
-                                        PeriodTimeEnum.valueOf(resultSet.getString("reminded_period_time_enum")),
-                                        resultSet.getInt("reminded_count_days_before_birthday")
-                                ),
-                                new AboutFriend(resultSet.getString("name_friend")),
-                                user
-                        )
-                );
-            }
-            logger.info("Read ALL User Friends Data was successful!");
+        var resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            userFriendsDataList.add(
+                    new UserFriendsData(
+                            new FriendBirthdayDate(
+                                    resultSet.getDate("friend_date")
+                                             .toLocalDate(),
+                                    resultSet.getInt("reminded_friend_hour"),
+                                    resultSet.getInt("reminded_friend_minutes"),
+                                    PeriodTimeEnum.valueOf(resultSet.getString("reminded_period_time_enum")),
+                                    resultSet.getInt("reminded_count_days_before_birthday")
+                            ),
+                            new AboutFriend(resultSet.getString("name_friend")),
+                            user
+                    )
+            );
         }
+        logger.info("Read ALL User Friends Data was successful!");
     }
 
     /**
@@ -200,8 +200,8 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
     public List<UserFriendsData> readAllUserFriendsDataAscendingByNameFriend(final User user) {
         userFriendsDataList = new ArrayList<>();
 
-        try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement
+        try (var connection = DBConnector.getConnection();
+             var statement
                      = connection.prepareStatement(QueryUserFriendsData.FIND_USER_FRIENDS_DATA_BY_USER_ID_ASCENDING_NAME_FRIEND)) {
             readByIdUserUserFriendData(user, statement);
         } catch (SQLException e) {
@@ -239,8 +239,8 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
             return false;
         }
 
-        try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement
+        try (var connection = DBConnector.getConnection();
+             var statement
                      = connection.prepareStatement(QueryUserFriendsData.UPDATE_USER_FRIENDS_DATA_BY_ID_USER_FRIEND_DATE)) {
             statement.setDate(1, Date.valueOf(newUserFriendsData.getFriendBirthdayDate()
                                                                 .getFriendDate()));
@@ -283,8 +283,8 @@ public class UserFriendsDataDAOMySQLImpl implements UserFriendsDataDAO {
                                .getPassword()
         );
 
-        try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement
+        try (var connection = DBConnector.getConnection();
+             var statement
                      = connection.prepareStatement(QueryUserFriendsData.DELETE_USER_FRIENDS_DATA_BY_ID_USER_FRIEND_DATE)) {
             statement.setLong(1, ReadIdMySQL.readIdFriendsDataRowByIdUserAndFriendNameAndDateFriendBirthday(idUser, userFriendsData.getAboutFriend()
                                                                                                                                    .getNameFriend(), String.valueOf(userFriendsData.getFriendBirthdayDate()

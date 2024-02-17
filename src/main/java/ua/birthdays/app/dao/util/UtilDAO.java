@@ -14,12 +14,13 @@ import ua.birthdays.app.dao.query.QueryUserFriendsData;
 import java.sql.*;
 import java.time.LocalDate;
 
+import static ua.birthdays.app.dao.util.Constant.*;
+
 /**
  * Utility class for working with the database.
  */
 public final class UtilDAO {
     private static final Logger logger = LogManager.getLogger(UtilDAO.class.getName());
-    private static final String FILE_PROP_DB_NAME = "db.properties";
 
     private UtilDAO() {
     }
@@ -32,13 +33,16 @@ public final class UtilDAO {
      */
     public static boolean isTableExists(String nameTable) {
 
-        PropertiesFile propertiesFile = new PropertiesFile();
-        propertiesFile.load(FILE_PROP_DB_NAME);
+        PropertiesFile.load(DB_NAME_PROP_FILE_KEY);
         logger.info("Properties file was found!");
 
-        try (Connection connection = DBConnector.getConnection();
-             ResultSet tables = connection.getMetaData()
-                                          .getTables(propertiesFile.getProperty("app.birthdays.data.db.name"), null, nameTable, new String[]{"TABLE"})
+        try (var connection = DBConnector.getConnection();
+             var tables = connection.getMetaData()
+                                    .getTables(
+                                            PropertiesFile.getProperty(APP_BIRTHDAYS_DATA_DB_NAME),
+                                            null,
+                                            nameTable,
+                                            new String[]{"TABLE"})
         ) {
 
             return tables.next();
@@ -50,8 +54,8 @@ public final class UtilDAO {
 
     public static void isUserTableExists() {
         if (!UtilDAO.isTableExists(EnumDBNameTable.USER_TABLE.getEnumDBEnvironment())) {
-            try (Connection connection = DBConnector.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(QueryUser.CREATE_TABLE_USER)
+            try (var connection = DBConnector.getConnection();
+                 var statement = connection.prepareStatement(QueryUser.CREATE_TABLE_USER)
             ) {
                 statement.executeUpdate();
                 logger.info("Create table \"users\" was successful!");
@@ -73,8 +77,8 @@ public final class UtilDAO {
     public static boolean isUserFriendsDataRowExists(long idUser,
                                                      String friendsName,
                                                      LocalDate dateFriendBirthday) {
-        try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement
+        try (var connection = DBConnector.getConnection();
+             var statement
                      = connection.prepareStatement(QueryUserFriendsData.EXISTS_BY_USER_ID_AND_FRIEND_NAME_AND_FRIEND_DATE)) {
             statement.setLong(1, idUser);
             statement.setString(2, friendsName);
@@ -89,8 +93,8 @@ public final class UtilDAO {
 
     public static void isTableUserFriendDataExist() {
         if (!UtilDAO.isTableExists(EnumDBNameTable.USER_FRIENDS_DATA_TABLE.getEnumDBEnvironment())) {
-            try (Connection connection = DBConnector.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(QueryUserFriendsData.CREATE_TABLE_USER_FRIENDS_DATA)
+            try (var connection = DBConnector.getConnection();
+                 var statement = connection.prepareStatement(QueryUserFriendsData.CREATE_TABLE_USER_FRIENDS_DATA)
             ) {
                 statement.executeUpdate();
                 logger.info("Create table \"user_friends_data\" was successful!");
@@ -103,8 +107,8 @@ public final class UtilDAO {
 
     public static void isTableFriendBirthdayDateExist() {
         if (!UtilDAO.isTableExists(EnumDBNameTable.FRIEND_BIRTHDAY_DATE_TABLE.getEnumDBEnvironment())) {
-            try (Connection connection = DBConnector.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(QueryFriendBirthdayDate.CREATE_TABLE_FRIEND_BIRTHDAY_DATE)
+            try (var connection = DBConnector.getConnection();
+                 var statement = connection.prepareStatement(QueryFriendBirthdayDate.CREATE_TABLE_FRIEND_BIRTHDAY_DATE)
             ) {
                 statement.executeUpdate();
                 logger.info("Create table \"friend_birthday_date\" was successful!");
@@ -117,8 +121,8 @@ public final class UtilDAO {
 
     public static void isTableAboutFriendExist() {
         if (!UtilDAO.isTableExists(EnumDBNameTable.ABOUT_FRIEND_TABLE.getEnumDBEnvironment())) {
-            try (Connection connection = DBConnector.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(QueryAboutFriend.CREATE_TABLE_ABOUT_FRIEND)
+            try (var connection = DBConnector.getConnection();
+                 var statement = connection.prepareStatement(QueryAboutFriend.CREATE_TABLE_ABOUT_FRIEND)
             ) {
                 statement.executeUpdate();
                 logger.info("Create table \"about_friend\" was successful!");

@@ -36,21 +36,23 @@ public class AboutFriendDAOMySQLImpl implements AboutFriendDAO {
     public long createAboutFriend(final AboutFriend aboutFriend) {
         UtilDAO.isTableAboutFriendExist();
 
-        try (Connection connection = DBConnector.getConnection();
-             PreparedStatement statement
+        try (var connection = DBConnector.getConnection();
+             var statement
                      = connection.prepareStatement(QueryAboutFriend.INSERT_INTO_ABOUT_FRIEND, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, aboutFriend.getNameFriend());
 
             if (statement.executeUpdate() > 0) {
-                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        logger.info("Create AboutFriend was successful!");
-                        return generatedKeys.getLong(1);
-                    } else {
-                        logger.info("Key of new row is not found!");
-                        return -1;
-                    }
+
+                var generatedKeys = statement.getGeneratedKeys();
+
+                if (generatedKeys.next()) {
+                    logger.info("Create AboutFriend was successful!");
+                    return generatedKeys.getLong(1);
+                } else {
+                    logger.info("Key of new row is not found!");
+                    return -1;
                 }
+
             } else {
                 logger.info("Row is not added!");
                 return -1;
