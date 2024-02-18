@@ -2,15 +2,15 @@ package ua.birthdays.app.ui.swing.features;
 
 import ua.birthdays.app.dao.env.EnumStateSorted;
 import ua.birthdays.app.dao.env.PeriodTimeEnum;
-import ua.birthdays.app.domain.exceptions.OpenFileException;
-import ua.birthdays.app.domain.impl.CSVWriterServiceImpl;
-import ua.birthdays.app.domain.impl.UserFriendsDataServiceImpl;
-import ua.birthdays.app.domain.impl.PDFWriterServiceImpl;
-import ua.birthdays.app.domain.FileWriterService;
-import ua.birthdays.app.domain.UserFriendsDataService;
-import ua.birthdays.app.models.*;
-import ua.birthdays.app.models.audio.Audio;
-import ua.birthdays.app.models.audio.MP3Player;
+import ua.birthdays.app.service.exceptions.OpenFileException;
+import ua.birthdays.app.service.impl.CSVWriterServiceImpl;
+import ua.birthdays.app.service.impl.UserFriendsDataServiceImpl;
+import ua.birthdays.app.service.impl.PDFWriterServiceImpl;
+import ua.birthdays.app.service.FileWriterService;
+import ua.birthdays.app.service.UserFriendsDataService;
+import ua.birthdays.app.model.*;
+import ua.birthdays.app.service.impl.audio.Audio;
+import ua.birthdays.app.service.impl.audio.MP3Player;
 import ua.birthdays.app.ui.swing.menuview.HomeView;
 import ua.birthdays.app.ui.swing.util.ConstantPhrases;
 

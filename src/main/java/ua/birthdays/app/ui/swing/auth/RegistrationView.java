@@ -1,7 +1,7 @@
 package ua.birthdays.app.ui.swing.auth;
 
-import ua.birthdays.app.domain.AuthService;
-import ua.birthdays.app.domain.impl.AuthServiceImpl;
+import ua.birthdays.app.service.AuthService;
+import ua.birthdays.app.service.impl.AuthServiceImpl;
 import ua.birthdays.app.ui.swing.menuview.HomeView;
 import ua.birthdays.app.ui.swing.util.ConstantPhrases;
 
@@ -44,9 +44,12 @@ public class RegistrationView extends JDialog {
     }
 
     private void confirmRegistration() {
-        if (firstName.getText().isEmpty() ||
-                lastName.getText().isEmpty() ||
-                email.getText().isEmpty() ||
+        if (firstName.getText()
+                     .isEmpty() ||
+                lastName.getText()
+                        .isEmpty() ||
+                email.getText()
+                     .isEmpty() ||
                 password.getPassword().length == 0 ||
                 confirmPassword.getPassword().length == 0
         ) {

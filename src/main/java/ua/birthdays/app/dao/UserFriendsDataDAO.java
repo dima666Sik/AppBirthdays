@@ -1,7 +1,7 @@
 package ua.birthdays.app.dao;
 
-import ua.birthdays.app.models.User;
-import ua.birthdays.app.models.UserFriendsData;
+import ua.birthdays.app.model.User;
+import ua.birthdays.app.model.UserFriendsData;
 
 import java.util.List;
 

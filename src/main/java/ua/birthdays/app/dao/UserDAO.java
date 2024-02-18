@@ -1,6 +1,6 @@
 package ua.birthdays.app.dao;
 
-import ua.birthdays.app.models.User;
+import ua.birthdays.app.model.User;
 
 import java.util.Optional;
 

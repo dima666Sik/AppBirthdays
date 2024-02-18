@@ -1,8 +1,8 @@
 package ua.birthdays.app.ui.swing.auth;
 
-import ua.birthdays.app.domain.impl.AuthServiceImpl;
-import ua.birthdays.app.domain.AuthService;
-import ua.birthdays.app.models.User;
+import ua.birthdays.app.service.impl.AuthServiceImpl;
+import ua.birthdays.app.service.AuthService;
+import ua.birthdays.app.model.User;
 import ua.birthdays.app.ui.swing.features.ListUserFriendBirthdaysView;
 import ua.birthdays.app.ui.swing.menuview.HomeView;
 import ua.birthdays.app.ui.swing.util.ConstantPhrases;

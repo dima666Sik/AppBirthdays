@@ -11,8 +11,8 @@ import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -24,7 +24,7 @@ import static ua.birthdays.app.dao.util.Constant.*;
 public final class ConnectionPool {
     private static final Logger logger = LogManager.getLogger(ConnectionPool.class.getName());
     private static BlockingQueue<Connection> pool;
-    private static final List<Connection> connections = new ArrayList<>();
+    private static final Set<Connection> connections = new HashSet<>();
 
     private ConnectionPool() {
     }
