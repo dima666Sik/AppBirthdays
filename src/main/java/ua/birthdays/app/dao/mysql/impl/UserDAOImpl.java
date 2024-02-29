@@ -30,7 +30,7 @@ public class UserDAOImpl implements UserDAO {
      * @throws DataAddingException if there was an error creating the user
      */
     @Override
-    public boolean createUser(final User user) throws DataAddingException {
+    public boolean createUser(final User user) {
         UtilDAO.isUserTableExists();
 
         if (userIsExist(user)) {
@@ -64,7 +64,7 @@ public class UserDAOImpl implements UserDAO {
      * @throws DataReadingException if there was an error reading the user
      */
     @Override
-    public Optional<User> findUserByEmailAndPassword(String email, String password) throws DataReadingException {
+    public Optional<User> findUserByEmailAndPassword(String email, String password) {
         if (!UtilDAO.isTableExists(EnumDBNameTable.USER_TABLE.getEnumDBEnvironment())) {
             logger.info("Read user wasn't successful! Table \"{}\" not exists!",
                     EnumDBNameTable.USER_TABLE.getEnumDBEnvironment());
@@ -103,7 +103,7 @@ public class UserDAOImpl implements UserDAO {
      * @return true if the user exists, false otherwise
      * @throws DataReadingException if there was an error reading the user
      */
-    private boolean userIsExist(User user) throws DataReadingException {
+    private boolean userIsExist(User user) {
 
         boolean flag = false;
 

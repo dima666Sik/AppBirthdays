@@ -1,8 +1,6 @@
 package ua.birthdays.app.dao.exceptions;
 
-public class TableExistsException extends RuntimeException {
-    public TableExistsException() {
-    }
+public class TableExistsException extends DatabaseException {
 
     public TableExistsException(String message) {
         super(message);
@@ -14,5 +12,9 @@ public class TableExistsException extends RuntimeException {
 
     public TableExistsException(Throwable cause) {
         super(cause);
+    }
+
+    public TableExistsException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

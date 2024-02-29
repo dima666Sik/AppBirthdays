@@ -1,9 +1,6 @@
 package ua.birthdays.app.dao.exceptions;
 
-public class DataRemovingException extends RuntimeException {
-    public DataRemovingException() {
-    }
-
+public class DataRemovingException extends DatabaseException {
     public DataRemovingException(String message) {
         super(message);
     }
@@ -14,5 +11,9 @@ public class DataRemovingException extends RuntimeException {
 
     public DataRemovingException(Throwable cause) {
         super(cause);
+    }
+
+    public DataRemovingException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }
