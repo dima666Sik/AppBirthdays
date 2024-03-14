@@ -19,53 +19,53 @@ public class QueryUserFriendsData {
 
     public static final String FIND_USER_FRIENDS_DATA_BY_USER_ID = "select friend_birthday_date.*, about_friend.* \n" +
             "from user_friends_data \n" +
-            "left join friend_birthday_date on user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date \n" +
-            "left join about_friend on user_friends_data.id_about_friend = about_friend.id_about_friend \n" +
+            "inner join friend_birthday_date on user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date \n" +
+            "inner join about_friend on user_friends_data.id_about_friend = about_friend.id_about_friend \n" +
             "where user_friends_data.id_user=(?);";
 
     public static final String FIND_USER_FRIENDS_DATA_BY_USER_ID_ASCENDING_NAME_FRIEND =
             "select friend_birthday_date.*, about_friend.* \n" +
                     "from user_friends_data \n" +
-                    "left join friend_birthday_date on user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date \n" +
-                    "left join about_friend on user_friends_data.id_about_friend = about_friend.id_about_friend \n" +
+                    "inner join friend_birthday_date on user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date \n" +
+                    "inner join about_friend on user_friends_data.id_about_friend = about_friend.id_about_friend \n" +
                     "where user_friends_data.id_user=(?) " +
                     "order by about_friend.name_friend ASC;";
 
     public static final String FIND_USER_FRIENDS_DATA_BY_USER_ID_DESCENDING_NAME_FRIEND =
             "select friend_birthday_date.*, about_friend.* \n" +
                     "from user_friends_data \n" +
-                    "left join friend_birthday_date on user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date \n" +
-                    "left join about_friend on user_friends_data.id_about_friend = about_friend.id_about_friend \n" +
+                    "inner join friend_birthday_date on user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date \n" +
+                    "inner join about_friend on user_friends_data.id_about_friend = about_friend.id_about_friend \n" +
                     "where user_friends_data.id_user=(?) " +
                     "order by about_friend.name_friend DESC;";
 
     public static final String FIND_USER_FRIENDS_DATA_BY_USER_ID_ASCENDING_FRIEND_BIRTHDAY_DATE =
             "select friend_birthday_date.*, about_friend.* \n" +
                     "from user_friends_data \n" +
-                    "left join friend_birthday_date on user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date \n" +
-                    "left join about_friend on user_friends_data.id_about_friend = about_friend.id_about_friend \n" +
+                    "inner join friend_birthday_date on user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date \n" +
+                    "inner join about_friend on user_friends_data.id_about_friend = about_friend.id_about_friend \n" +
                     "where user_friends_data.id_user=(?) " +
                     "order by friend_birthday_date.friend_date ASC;";
 
     public static final String FIND_USER_FRIENDS_DATA_BY_USER_ID_DESCENDING_FRIEND_BIRTHDAY_DATE =
             "select friend_birthday_date.*, about_friend.* \n" +
                     "from user_friends_data \n" +
-                    "left join friend_birthday_date on user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date \n" +
-                    "left join about_friend on user_friends_data.id_about_friend = about_friend.id_about_friend \n" +
+                    "inner join friend_birthday_date on user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date \n" +
+                    "inner join about_friend on user_friends_data.id_about_friend = about_friend.id_about_friend \n" +
                     "where user_friends_data.id_user=(?) " +
                     "order by friend_birthday_date.friend_date DESC;";
 
     public static final String EXISTS_BY_USER_ID_AND_FRIEND_NAME_AND_FRIEND_DATE =
             "select id_user_friends_data\n" +
                     "from user_friends_data \n" +
-                    "left join friend_birthday_date on user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date \n" +
-                    "left join about_friend on user_friends_data.id_about_friend = about_friend.id_about_friend \n" +
+                    "inner join friend_birthday_date on user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date \n" +
+                    "inner join about_friend on user_friends_data.id_about_friend = about_friend.id_about_friend \n" +
                     "where user_friends_data.id_user=(?) and about_friend.name_friend=(?) and friend_birthday_date.friend_date=(?);";
 
     public static final String UPDATE_USER_FRIENDS_DATA_BY_ID_USER_FRIEND_DATE =
             "UPDATE user_friends_data\n" +
-                    "JOIN friend_birthday_date ON user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date\n" +
-                    "JOIN about_friend ON user_friends_data.id_about_friend = about_friend.id_about_friend\n" +
+                    "inner join friend_birthday_date ON user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date\n" +
+                    "inner join about_friend ON user_friends_data.id_about_friend = about_friend.id_about_friend\n" +
                     "SET friend_birthday_date.friend_date = (?),\n" +
                     "\tfriend_birthday_date.reminded_friend_hour = (?),\n" +
                     "\tfriend_birthday_date.reminded_friend_minutes = (?),\n" +
@@ -77,8 +77,8 @@ public class QueryUserFriendsData {
     public static final String DELETE_USER_FRIENDS_DATA_BY_ID_USER_FRIEND_DATE =
             "delete user_friends_data, friend_birthday_date, about_friend\n" +
                     "FROM user_friends_data\n" +
-                    "JOIN friend_birthday_date ON user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date\n" +
-                    "JOIN about_friend ON user_friends_data.id_about_friend = about_friend.id_about_friend\n" +
+                    "inner join friend_birthday_date ON user_friends_data.id_friend_birthday_date = friend_birthday_date.id_friend_birthday_date\n" +
+                    "inner join about_friend ON user_friends_data.id_about_friend = about_friend.id_about_friend\n" +
                     "WHERE \n" +
                     "\tuser_friends_data.id_user_friends_data = (?)\n";
 
